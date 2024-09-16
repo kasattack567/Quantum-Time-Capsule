@@ -1,2 +1,2 @@
 # Quantum-Time-Capsule
-Website 
+A website for a quantum time capsule project
