@@ -74,15 +74,20 @@ def validate_email_address(email):
     except EmailNotValidError:
         return False
 
-# Route for the index page
-@app.route('/', methods=['GET', 'POST'])
+# Route for the intro page (starting screen)
+@app.route('/')
+def intro():
+    return render_template('intro.html')
+
+# Route for the index (home) page after submitting name
+@app.route('/index', methods=['GET', 'POST'])
 def index():
     max_characters = 350  # Set maximum character limit
     max_message_size = 446  # Maximum message size in bytes
 
     if request.method == 'POST':
+        name = request.form.get('name')  # Fetch name from intro page form
         message_text = request.form.get('message', '')
-        name = request.form.get('name', '')
         email = request.form.get('email', '')
         age = request.form.get('age', type=int)
         subject = request.form.get('subject', '')
