@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quantum Time Capsule</title>
+    <!-- Google Fonts for Futuristic Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Roboto&display=swap" rel="stylesheet">
+    <!-- Bootstrap for layout -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- Inline CSS for character counter positioning -->
+    <style>
+        .char-counter {
+            position: absolute;
+            bottom: 10px;
+            right: 15px;
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        .position-relative {
+            position: relative;
+        }
+
+        /* Matrix Loading Screen CSS */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            visibility: hidden;
+            overflow: hidden;
+        }
+
+        .loading-screen.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="{{ url_for('index') }}">Quantum Time Capsule</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('demographics') }}">Demographics</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('about') }}">About</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <!-- Header Section -->
+        <header class="text-center py-5">
+            <h1 class="display-4 text-uppercase">Quantum Time Capsule</h1>
+            <p class="lead">Create a message that can only be read when quantum computers can break RSA encryption.</p>
+        </header>
+
+        <!-- Message Section -->
+        <section id="message" class="text-center py-5">
+            <div class="container">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    {% for category, message in messages %}
+                      <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+                <form method="POST">
+                    <!-- Name Input Field -->
+                    <div class="form-group">
+                        <label for="name" class="text-uppercase">Enter your name:</label>
+                        <input type="text" name="name" class="form-control form-control-lg text-center bg-dark text-white border-0" placeholder="Enter your name" required>
+                    </div>
+
+                    <!-- Message Input Field -->
+                    <div class="form-group position-relative">
+                        <label for="message" class="text-uppercase">Enter your message (max {{ max_characters }} characters):</label>
+                        <textarea name="message" class="form-control form-control-lg text-center bg-dark text-white border-0" rows="6" placeholder="Write your message here..." required>{{ message|default('') }}</textarea>
+                        <div class="char-counter"><span id="charCount">0</span>/{{ max_characters }}</div>
+                    </div>
+
+                    <!-- Email Field with Client-Side Validation -->
+                    <div class="form-group">
+                        <label for="email" class="text-uppercase">Email Address (optional):</label>
+                        <input type="email" name="email" class="form-control form-control-lg text-center bg-dark text-white border-0"
+                               placeholder="Enter your email address" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                        <small class="form-text text-muted">We'll notify you when quantum computers can break RSA encryption.</small>
+                    </div>
+
+                    <!-- Age Field with Client-Side Validation -->
+                    <div class="form-group">
+                        <label for="age" class="text-uppercase">Age:</label>
+                        <input type="number" name="age" class="form-control form-control-lg text-center bg-dark text-white border-0"
+                               placeholder="Enter your age" min="0" max="120">
+                    </div>
+
+                    <!-- Demographic Data (Optional) -->
+                    <div class="form-group">
+                        <label for="subject" class="text-uppercase">Subject of Study:</label>
+                        <input type="text" name="subject" class="form-control form-control-lg text-center bg-dark text-white border-0" placeholder="E.g., Physics, Computer Science">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="country" class="text-uppercase">Country:</label>
+                        <input type="text" name="country" class="form-control form-control-lg text-center bg-dark text-white border-0" placeholder="Enter your country">
+                    </div>
+
+                    <!-- User Consent -->
+                    <div class="form-group form-check mt-4">
+                        <input type="checkbox" class="form-check-input" id="consentCheckbox" required>
+                        <label class="form-check-label" for="consentCheckbox">I consent to the storage and processing of my data as described.</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg mt-3">Encrypt Message</button>
+
+                </form>
+            </div>
+        </section>
+
+        <!-- Information Section About Quantum Computing -->
+        <section id="quantum-info" class="py-5 text-white" style="background-color: #222845;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h2>Quantum Computing & RSA</h2>
+                        <p>Quantum computers have the potential to revolutionize encryption by breaking widely-used algorithms like RSA. This project creates a "time capsule" where messages encrypted today can only be decrypted once quantum computers are capable of breaking RSA encryption.</p>
+                        <ul>
+                            <li>RSA uses the difficulty of factoring large prime numbers for encryption.</li>
+                            <li>Quantum computers, with their immense processing power, could break RSA in the future.</li>
+                            <li>Our messages will remain secret until that day comes.</li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-6">
+                        <!-- Image for Quantum Computing -->
+                        <img src="{{ url_for('static', filename='quantum_computing_image.jpg') }}" alt="Quantum Computing Graphic" class="img-fluid rounded shadow">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer Section -->
+        <footer class="text-center py-4" style="background-color: #101427;">
+            <p>&copy; 2024 Quantum Time Capsule. Created with future technology in mind.</p>
+        </footer>
+    </div>
+
+    <!-- Matrix Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <canvas id="c"></canvas>
+    </div>
+
+    <!-- Bootstrap and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- JavaScript for Character Counter and Byte Limit -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var textarea = document.querySelector('textarea[name="message"]');
+        var maxCharacters = {{ max_characters }};
+        var maxBytes = 446;  // Maximum message size in bytes
+        var charCountSpan = document.getElementById('charCount');
+
+        textarea.addEventListener('input', function() {
+            var message = textarea.value;
+            var messageLength = message.length;
+            var encoder = new TextEncoder();
+            var bytes = encoder.encode(message).length;
+
+            charCountSpan.textContent = messageLength;
+
+            if (messageLength > maxCharacters || bytes > maxBytes) {
+                textarea.value = message.substring(0, messageLength - 1);
+                charCountSpan.textContent = textarea.value.length;
+            }
+        });
+    });
+    </script>
+
+    <!-- Matrix Animation Script -->
+    <script>
+        // Matrix Animation
+        var c = document.getElementById("c");
+        var ctx = c.getContext("2d");
+
+        //making the canvas full screen
+        c.height = window.innerHeight;
+        c.width = window.innerWidth;
+
+        //characters for the animation
+        var matrix = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}";
+        matrix = matrix.split("");
+
+        var font_size = 10;
+        var columns = c.width / font_size; //number of columns for the rain
+        var drops = [];
+        for (var x = 0; x < columns; x++) drops[x] = 1;
+
+        function draw() {
+            //translucent BG to show trail
+            ctx.fillStyle = "rgba(0, 0, 0, 0.04)";
+            ctx.fillRect(0, 0, c.width, c.height);
+
+            ctx.fillStyle = "#f4427d"; // pink text
+            ctx.font = font_size + "px arial";
+            for (var i = 0; i < drops.length; i++) {
+                var text = matrix[Math.floor(Math.random() * matrix.length)];
+                ctx.fillText(text, i * font_size, drops[i] * font_size);
+
+                //sending the drop back to the top randomly after it has crossed the screen
+                if (drops[i] * font_size > c.height && Math.random() > 0.975) drops[i] = 0;
+
+                //incrementing Y coordinate
+                drops[i]++;
+            }
+        }
+
+        setInterval(draw, 35);
+    </script>
+
+    <!-- JavaScript for Loading Screen and Form Submission -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('form');
+            const loadingScreen = document.getElementById('loading-screen');
+
+            form.addEventListener('submit', function (event) {
+                // Prevent default form submission
+                event.preventDefault();
+
+                // Show the loading screen
+                loadingScreen.classList.add('active');
+
+                // Prevent scrolling on the page while the loading screen is active
+                document.body.style.overflow = 'hidden';
+
+                // Wait for a few seconds (e.g., 2 seconds) to simulate encryption
+                setTimeout(function () {
+                    // Allow scrolling again and submit the form
+                    document.body.style.overflow = 'auto';
+                    form.submit();
+                }, 2000); // Adjust this timeout to match your encryption time
+            });
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,78 @@
+<!-- templates/about.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>About - Quantum Time Capsule</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Roboto&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="{{ url_for('index') }}">Quantum Time Capsule</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('demographics') }}">Demographics</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('about') }}">About <span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- About Content -->
+    <div class="container mt-5">
+        <h1 class="text-center mb-5">Meet the Team</h1>
+        <div class="row">
+            <!-- Qasim's Profile -->
+            <div class="col-md-6 text-center">
+                <img src="{{ url_for('static', filename='qasim_bedford.jpg') }}" alt="Qasim Bedford" class="rounded-circle profile-pic">
+                <h3 class="mt-3">Qasim Bedford</h3>
+                <p>Qasim is a physics prodigy from UCL with a knack for machine learning and a dream to build quantum computers that can finally solve his Rubik's cube collection. When he's not entangled in quantum algorithms, he's leading his MMA team to victory—proving that physics isn't the only thing he can punch holes in.</p>
+                <a href="https://www.linkedin.com/in/qasim-b-2611b21b8/" target="_blank" class="social-icon">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+            </div>
+            <!-- Shashvat's Profile -->
+            <div class="col-md-6 text-center">
+                <img src="{{ url_for('static', filename='shashvat_shukla.jpg') }}" alt="Shashvat Shukla" class="rounded-circle profile-pic">
+                <h3 class="mt-3">Shashvat Shukla</h3>
+                <p>Shashvat is a quantum algorithms specialist pursuing his PhD at UCL. He aims to unlock the secrets of the quantum realm before his coffee gets cold. With degrees in philosophy and computer science, he's determined to answer life's big questions—like why his code only works after midnight.</p>
+                <a href="https://www.linkedin.com/in/shashvatshukla/" target="_blank" class="social-icon">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+            </div>
+        </div>
+        <div class="text-center mt-5">
+            <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg">Back to Home</a>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="text-center py-4" style="background-color: #101427;">
+        <p>&copy; 2024 Quantum Time Capsule. Created with future technology in mind.</p>
+    </footer>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

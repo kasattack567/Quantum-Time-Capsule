@@ -1,0 +1,92 @@
+<!-- templates/result.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Encrypted Message - Quantum Time Capsule</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Roboto&display=swap">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="{{ url_for('index') }}">Quantum Time Capsule</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('demographics') }}">Demographics</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('about') }}">About</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+        <!-- Encrypted Message Section -->
+        <section id="encrypted-message" class="text-center py-5">
+            <div class="container">
+                <!-- Display Name (if provided) -->
+                {% if message_data.name %}
+                <h2>Message from {{ message_data.name }}</h2>
+                {% endif %}
+
+                <h2>Your Encrypted Message (Base64 Encoded):</h2>
+                <textarea id="ciphertext" class="form-control form-control-lg bg-dark text-white border-0 mt-4" rows="8" readonly>{{ message_data.ciphertext }}</textarea>
+                <button class="btn btn-secondary btn-lg mt-3" onclick="copyToClipboard('ciphertext')">Copy Ciphertext</button>
+
+                <div class="mt-5">
+                    <h2>Public Key Modulus (N):</h2>
+                    <textarea id="modulus" class="form-control form-control-lg bg-dark text-white border-0 mt-4" rows="6" readonly>{{ message_data.public_key_n }}</textarea>
+                    <button class="btn btn-secondary btn-lg mt-3" onclick="copyToClipboard('modulus')">Copy Modulus</button>
+                </div>
+
+                <div class="mt-5">
+                    <h2>Public Exponent (e):</h2>
+                    <textarea id="exponent" class="form-control form-control-lg bg-dark text-white border-0" rows="1" readonly>{{ message_data.public_exponent_e }}</textarea>
+                    <button class="btn btn-secondary btn-lg mt-3" onclick="copyToClipboard('exponent')">Copy Exponent</button>
+                </div>
+
+                <div class="mt-4">
+                    <p>Key Generation Time: <strong>{{ message_data.key_gen_time }} seconds</strong></p>
+                    <p>Encryption Time: <strong>{{ message_data.encryption_time }} seconds</strong></p>
+                </div>
+                <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg mt-4">Encrypt Another Message</a>
+            </div>
+        </section>
+
+        <!-- Footer Section -->
+        <footer class="text-center py-4" style="background-color: #101427;">
+            <p>&copy; 2024 Quantum Time Capsule. Created with future technology in mind.</p>
+        </footer>
+    </div>
+
+    <!-- Copy to Clipboard Script -->
+    <script>
+    function copyToClipboard(id) {
+        var copyText = document.getElementById(id);
+        copyText.select();
+        document.execCommand('copy');
+        alert(id.charAt(0).toUpperCase() + id.slice(1) + ' copied to clipboard');
+    }
+    </script>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
