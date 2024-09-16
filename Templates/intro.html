@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Time Capsule - Intro</title>
+    <style>
+        * {
+            font-family: "Courier New", monospace; /* Use a monospaced font */
+            color: #00FF00;
+        }
+
+        body {
+            background: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #start-screen {
+            text-align: center;
+            overflow: hidden;
+        }
+
+        #name-input {
+            display: block;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: black;
+            border: 2px solid #00FF00;
+            border-radius: 5px;
+            color: #00FF00;
+            font-size: 1.5em;
+            text-align: center;
+        }
+
+        #start {
+            background-color: black;
+            border: 5px solid #00FF00;
+            border-radius: 5px;
+            font-size: 2em;
+            display: block;
+            margin: 50px auto;
+            padding: 10px 30px;
+            visibility: hidden;
+            transition: all 0.3s ease; /* Smooth hover effect */
+        }
+
+        #start:hover {
+            cursor: pointer;
+            background-color: #00FF00;
+            color: black;
+            transform: scale(1.1); /* Button hover effect */
+        }
+
+        #start:active,
+        #start:focus {
+            outline: none;
+        }
+
+        pre {
+            white-space: pre; /* Preserve whitespace formatting */
+            font-size: 10px; /* Adjust font size for better alignment */
+            line-height: 1;  /* Line height for better spacing */
+            letter-spacing: -1px; /* Adjust letter spacing */
+            margin: 0; /* Remove extra margin */
+        }
+    </style>
+</head>
+<body>
+    <div id="start-screen">
+        <pre>
+
+
+
+
+    ,-----.      ___    _    ____    ,---.   .--.,---------.   ___    _ ,---.    ,---.        ,---------. .-./`) ,---.    ,---.    .-''-.              _______      ____    .-------.    .-'''-.   ___    _   .---.       .-''-.   
+  .'  .-,  '.  .'   |  | | .'  __ `. |    \  |  |\          \.'   |  | ||    \  /    |        \          \\ .-.')|    \  /    |  .'_ _   \            /   __  \   .'  __ `. \  _(`)_ \  / _     \.'   |  | |  | ,_|     .'_ _   \  
+ / ,-.|  \ _ \ |   .'  | |/   '  \  \|  ,  \ |  | `--.  ,---'|   .'  | ||  ,  \/  ,  |         `--.  ,---'/ `-' \|  ,  \/  ,  | / ( ` )   '          | ,_/  \__) /   '  \  \| (_ o._)| (`' )/`--'|   .'  | |,-./  )    / ( ` )   ' 
+;  \  '_ /  | :.'  '_  | ||___|  /  ||  |\_ \|  |    |   \   .'  '_  | ||  |\_   /|  |            |   \    `-'`"`|  |\_   /|  |. (_ o _)  |        ,-./  )       |___|  /  ||  (_,_) /(_ o _).   .'  '_  | |\  '_ '`) . (_ o _)  | 
+|  _`,/ \ _/  |'   ( \.-.|   _.-`   ||  _( )_\  |    :_ _:   '   ( \.-.||  _( )_/ |  |            :_ _:    .---. |  _( )_/ |  ||  (_,_)___|        \  '_ '`)        _.-`   ||   '-.-'  (_,_). '. '   ( \.-.| > (_)  ) |  (_,_)___| 
+: (  '\_/ \   ;' (`. _` /|.'   _    || (_ o _)  |    (_I_)   ' (`. _` /|| (_ o _) |  |            (_I_)    |   | | (_ o _) |  |'  \   .---.         > (_)  )  __ .'   _    ||   |     .---.  \  :' (`. _` /|(  .  .-' '  \   .---. 
+ \ `"/  \  )  \| (_ (_) _)|  _( )_  ||  (_,_)\  |   (_(=)_)  | (_ (_) _)|  (_,_)  |  |           (_(=)_)   |   | |  (_,_)  |  | \  `-'    /        (  .  .-'_/  )|  _( )_  ||   |     \    `-'  || (_ (_) _) `-'`-'|___\  `-'    / 
+  '. \_/``"/)  )\ /  . \ /\ (_ o _) /|  |    |  |    (_I_)    \ /  . \ /|  |      |  |            (_I_)    |   | |  |      |  |  \       /          `-'`-'     / \ (_ o _) //   )      \       /  \ /  . \ /  |        \\       /  
+    '-----' `-'  ``-'`-''  '.(_,_).' '--'    '--'    '---'     ``-'`-'' '--'      '--'            '---'    '---' '--'      '--'   `'-..-'             `._____.'   '.(_,_).' `---'       `-...-'    ``-'`-''   `--------` `'-..-'   
+
+
+
+
+        </pre>
+        <p>Welcome</p>
+        <label for="name-input" style="font-size: 1.5em;">Please enter your name:</label>
+        <input type="text" id="name-input" placeholder="Your name" />
+        <button id="start">Start</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const nameInput = document.getElementById('name-input');
+            const startButton = document.getElementById('start');
+
+            nameInput.addEventListener('input', function() {
+                // Show the start button when the user types something
+                if (nameInput.value.trim() !== '') {
+                    startButton.style.visibility = 'visible';
+                } else {
+                    startButton.style.visibility = 'hidden';
+                }
+            });
+
+            // When the start button is clicked, redirect to the home page
+            startButton.addEventListener('click', function() {
+                // Save the name to localStorage (if you want to use it later)
+                localStorage.setItem('userName', nameInput.value.trim());
+
+                // Redirect to the home page
+                window.location.href = '/index';  // Change this to your home page route
+            });
+        });
+    </script>
+</body>
+</html>
+
