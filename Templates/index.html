@@ -93,13 +93,7 @@
                     {% endfor %}
                   {% endif %}
                 {% endwith %}
-                <form method="POST">
-                    <!-- Name Input Field -->
-                    <div class="form-group">
-                        <label for="name" class="text-uppercase">Enter your name:</label>
-                        <input type="text" name="name" class="form-control form-control-lg text-center bg-dark text-white border-0" placeholder="Enter your name" required>
-                    </div>
-
+                <form id="message-form" method="POST">
                     <!-- Message Input Field -->
                     <div class="form-group position-relative">
                         <label for="message" class="text-uppercase">Enter your message (max {{ max_characters }} characters):</label>
@@ -272,6 +266,22 @@
             });
         });
     </script>
+
+    <!-- JavaScript to Inject Name -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get the name from localStorage set in the intro page
+            const name = localStorage.getItem('userName');
+            
+            // Add the name as a hidden input to the form
+            const form = document.querySelector('form');
+            const hiddenNameInput = document.createElement('input');
+            hiddenNameInput.type = 'hidden';
+            hiddenNameInput.name = 'name';
+            hiddenNameInput.value = name;
+
+            form.appendChild(hiddenNameInput);
+        });
+    </script>
 </body>
 </html>
-
