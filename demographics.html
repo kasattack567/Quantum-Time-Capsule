@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Demographics - Quantum Time Capsule</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Roboto&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="{{ url_for('index') }}">Quantum Time Capsule</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" 
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('demographics') }}">Demographics <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('about') }}">About</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Demographics Content -->
+    <div class="container mt-5">
+        <h1 class="text-center mb-5">User Demographics</h1>
+
+        <!-- Total Users and Average Age -->
+        <div class="row mb-4">
+            <div class="col-md-6 text-center">
+                <h3>Total Users Who Provided Data:</h3>
+                <p>{{ total_users }}</p>
+            </div>
+            <div class="col-md-6 text-center">
+                <h3>Average Age:</h3>
+                <p>{{ average_age|round(1) if average_age else 'N/A' }}</p>
+            </div>
+        </div>
+
+        <!-- Subjects of Study Pie Chart -->
+        <div class="row mb-5">
+            <div class="col-md-6 text-center">
+                <h3>Subjects of Study</h3>
+                <canvas id="subjectsChart"></canvas> <!-- Pie chart container -->
+            </div>
+            <!-- Countries Pie Chart -->
+            <div class="col-md-6 text-center">
+                <h3>Countries</h3>
+                <canvas id="countriesChart"></canvas> <!-- Pie chart container -->
+            </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg">Back to Home</a>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="text-center py-4" style="background-color: #101427;">
+        <p>&copy; 2024 Quantum Time Capsule. Created with future technology in mind.</p>
+    </footer>
+
+    <!-- Chart.js Data Population Script -->
+    <script>
+    // Subject of Study Pie Chart
+    const subjectsData = {
+        labels: [{% for subject, count in subjects %}'{{ subject if subject else "Unknown" }}',{% endfor %}],
+        datasets: [{
+            label: 'Subjects of Study',
+            data: [{% for subject, count in subjects %}{{ count }},{% endfor %}],
+            backgroundColor: [
+                '#007bff', '#dc3545', '#ffc107', '#28a745', '#17a2b8',
+                '#6c757d', '#6610f2', '#e83e8c', '#fd7e14', '#20c997'
+            ]
+        }]
+    };
+
+    const subjectsConfig = {
+        type: 'pie',
+        data: subjectsData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            }
+        }
+    };
+
+    // Country Pie Chart
+    const countriesData = {
+        labels: [{% for country, count in countries %}'{{ country if country else "Unknown" }}',{% endfor %}],
+        datasets: [{
+            label: 'Countries',
+            data: [{% for country, count in countries %}{{ count }},{% endfor %}],
+            backgroundColor: [
+                '#007bff', '#dc3545', '#ffc107', '#28a745', '#17a2b8',
+                '#6c757d', '#6610f2', '#e83e8c', '#fd7e14', '#20c997'
+            ]
+        }]
+    };
+
+    const countriesConfig = {
+        type: 'pie',
+        data: countriesData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            }
+        }
+    };
+
+    // Render charts
+    window.onload = function() {
+        var subjectsCtx = document.getElementById('subjectsChart').getContext('2d');
+        var countriesCtx = document.getElementById('countriesChart').getContext('2d');
+        new Chart(subjectsCtx, subjectsConfig);
+        new Chart(countriesCtx, countriesConfig);
+    };
+    </script>
+
+    <!-- jQuery and Bootstrap JS (Ensure this is at the bottom before the closing </body> tag) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
