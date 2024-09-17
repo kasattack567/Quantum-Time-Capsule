@@ -79,6 +79,11 @@ def validate_email_address(email):
 def intro():
     return render_template('intro.html')
 
+# Explore Page Route
+@app.route('/explore')
+def explore():
+    return render_template('explore.html')
+
 # Route for the index (home) page after submitting name
 @app.route('/index', methods=['GET', 'POST'])
 def index():
