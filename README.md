@@ -17,4 +17,6 @@ The **Quantum Time Capsule** is a unique web application designed to illustrate 
 - **Educational Content:** Explanations of the quantum concepts underlying the simulation.
 
 
-Finish off the rest if possible 
+Finish off the rest 
+
+need to add/map user flow - ux
