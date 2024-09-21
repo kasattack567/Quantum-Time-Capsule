@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy.sql import func
@@ -8,19 +8,30 @@ import base64
 import time
 import uuid
 import logging
-from email_validator import validate_email, EmailNotValidError  # To validate email addresses
+from email_validator import validate_email, EmailNotValidError
+from flask_mail import Mail, Message as MailMessage
 
 # Initialize the Flask app
 app = Flask(__name__)
 
-# MySQL database configuration (hardcoded)
+# Set a secret key for session management and flash messages
+app.secret_key = 'f21b2c6b9d2b4a6b8d2c8f7c1e4d3b8a'  # Replace with a secure key if needed
+
+# MySQL database configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://kasattack567:Rayhanqasim2!@kasattack567.mysql.pythonanywhere-services.com/kasattack567$default'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Database setup
-db = SQLAlchemy(app)
+# Flask-Mail configuration
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USERNAME'] = 'quantumtimecapsule@gmail.com'  # Replace with your email
+app.config['MAIL_PASSWORD'] = 'siee zwea fawl txrx'  # Replace with your email password
+app.config['MAIL_DEFAULT_SENDER'] = 'quantumtimecapsule@gmail.com'  # Replace with your email
 
-# Flask-Migrate setup
+mail = Mail(app)  # Initialize Flask-Mail
+db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 # Database Model
@@ -83,6 +94,11 @@ def intro():
 @app.route('/explore')
 def explore():
     return render_template('explore.html')
+
+# Explore More Page Route
+@app.route('/explore_more')
+def explore_more():
+    return render_template('explore_more.html')
 
 # Route for the index (home) page after submitting name
 @app.route('/index', methods=['GET', 'POST'])
@@ -154,21 +170,67 @@ def index():
             subject=subject if subject else None,
             country=country if country else None
         )
-        db.session.add(new_message)
-        db.session.commit()
+        try:
+            db.session.add(new_message)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            logging.error(f"Database error: {str(e)}")
+            return render_template('index.html', error="Database error occurred. Please try again.")
 
         return redirect(url_for('message', message_id=message_id))
     else:
         return render_template('index.html', max_characters=max_characters)
 
+
 # Route to display the encrypted message
 @app.route('/message/<message_id>')
 def message(message_id):
-    message_data = Message.query.filter_by(message_id=message_id).first()
+    try:
+        message_data = Message.query.filter_by(message_id=message_id).first()
+    except Exception as e:
+        logging.error(f"Database error: {str(e)}")
+        # You can render an error template or a minimal version of the page
+        return render_template('error.html', error_message="A database error occurred. Please try again later.")
+
     if not message_data:
         return redirect(url_for('index'))
 
     return render_template('result.html', message_data=message_data)
+
+# Route to handle demographic form submission via AJAX
+@app.route('/submit_demographics', methods=['POST'])
+def submit_demographics():
+    name = request.form.get('name')
+    email = request.form.get('email')
+    country = request.form.get('country')
+    occupation = request.form.get('occupation')
+    age = request.form.get('age', type=int)
+
+    # Validate email, if provided
+    if email and not validate_email_address(email):
+        return jsonify({'error': 'Invalid email address.'}), 400
+
+    # Validate age
+    if not validate_age(age):
+        return jsonify({'error': 'Invalid age. Age must be between 0 and 120.'}), 400
+
+    # Process and save the demographics data (for example, update an existing message record)
+    demographics_message = Message.query.filter_by(email=email).first()
+
+    if demographics_message:
+        demographics_message.name = name if name else None
+        demographics_message.age = age if age else None
+        demographics_message.country = country if country else None
+        demographics_message.subject = occupation if occupation else None
+        try:
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            logging.error(f"Database error during demographics update: {str(e)}")
+            return jsonify({'error': 'Database error during update.'}), 500
+
+    return jsonify({'success': 'Demographics submitted successfully!'})
 
 # Route for demographic data
 @app.route('/demographics')
