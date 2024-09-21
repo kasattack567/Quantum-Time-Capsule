@@ -11,7 +11,6 @@
         }
 
         body {
-            /* Updated path to your background file */
             background: url('/home/your-username/static/cool-background.svg') no-repeat center center fixed;
             background-size: cover;
             padding: 20px;
@@ -56,45 +55,59 @@
     </style>
 </head>
 <body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="{{ url_for('index') }}">Quantum Time Capsule</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('intro') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('index') }}">Create Capsule</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('explore_more') }}">How it works</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('demographics') }}">Who's using</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('about') }}">About Us</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Content -->
     <h1>Explore Quantum Time Capsule</h1>
 
     <div class="section">
         <h2>What is the Quantum Time Capsule?</h2>
         <p>
-            The Quantum Time Capsule is a digital project that explores the intersection of time and quantum mechanics. It serves as a repository of knowledge and tools that help users understand and visualize complex scientific concepts related to quantum physics and time.
+            Welcome to the Quantum Time Capsule! Here, you can discover the exciting world of quantum computing. Think of it as a digital vault for the future, where you can create and store messages that can only be opened when quantum computers become powerful enough to unlock them.
         </p>
     </div>
 
-    <div class="section">
-        <h2>What Does This Website Do?</h2>
-        <p>
-            This website is designed to guide you through the fundamentals of quantum physics, focusing particularly on how time behaves at the quantum level. You can explore experiments, view visualizations, and learn about the underlying principles of this project in an engaging way.
-        </p>
-    </div>
 
-    <div class="section">
-        <h2>How It Works</h2>
-        <p>
-            Our website is broken down into key areas:
-            <ul>
-                <li><strong>Explore:</strong> This section provides an introduction to key concepts and tools that help users grasp the science behind the project.</li>
-                <li><strong>Experiments:</strong> Run virtual experiments that simulate quantum phenomena and time dynamics.</li>
-                <li><strong>Archive:</strong> Access saved snapshots and historical data related to our work on time and quantum mechanics.</li>
-            </ul>
-        </p>
-    </div>
 
     <div class="section">
         <h2>Learn with Animations</h2>
         <p>
-            Learning quantum mechanics can be complex, but we've incorporated animations to help simplify the process. Hover over or click the area below to start the interactive experience.
+            Quantum mechanics can be hard to grasp, but don't worry — we’ve made it fun and interactive! Hover over or click the box below to start an animation that simplifies complex ideas with visual aids.
         </p>
 
         <!-- Placeholder for Animation or Interactive Content -->
         <div class="animation-placeholder">
-            Animation Goes Here
+            Click here for an animation!
         </div>
     </div>
+
 </body>
 </html>
 
