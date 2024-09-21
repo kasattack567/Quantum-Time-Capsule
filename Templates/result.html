@@ -1,70 +1,100 @@
-<!-- templates/result.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Encrypted Message - Quantum Time Capsule</title>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Roboto&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Roboto&display=swap" rel="stylesheet">
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Custom Stylesheet -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Your custom styles -->
+    <style>
+        body {
+            background-color: black;
+            color: white;
+        }
+
+        .form-control {
+            color: black; /* Change text color inside text boxes */
+        }
+
+        .container, h1, p, h4, .form-check-label {
+            color: white; /* Ensure all general text is white */
+        }
+
+        .bg-light {
+            background-color: #f8f9fa !important; /* Lighter background for the text areas */
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="{{ url_for('index') }}">Quantum Time Capsule</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('index') }}">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('demographics') }}">Demographics</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('about') }}">About</a>
-          </li>
-        </ul>
-      </div>
+        <a class="navbar-brand" href="{{ url_for('index') }}">Quantum Time Capsule</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('intro') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('index') }}">Create Capsule</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('explore_more') }}">How it works</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('demographics') }}">Who's using</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('about') }}">About Us</a>
+                </li>
+            </ul>
+        </div>
     </nav>
 
-    <div class="container-fluid">
-        <!-- Encrypted Message Section -->
-        <section id="encrypted-message" class="text-center py-5">
+    <div class="container-fluid py-5">
+        <!-- Pre-written Email Section -->
+        <section id="prewritten-email" class="text-center">
             <div class="container">
-                <!-- Display Name (if provided) -->
-                {% if message_data.name %}
-                <h2>Message from {{ message_data.name }}</h2>
-                {% endif %}
+                <h1 class="mb-4">Quantum Time Capsule</h1>
+                <p>Copy this draft email to send to your friends</p>
 
-                <h2>Your Encrypted Message (Base64 Encoded):</h2>
-                <textarea id="ciphertext" class="form-control form-control-lg bg-dark text-white border-0 mt-4" rows="8" readonly>{{ message_data.ciphertext }}</textarea>
-                <button class="btn btn-secondary btn-lg mt-3" onclick="copyToClipboard('ciphertext')">Copy Ciphertext</button>
+                <div class="border p-4 bg-light">
+                    <!-- Draft Email Content -->
+                    <textarea id="emailDraft" class="form-control form-control-lg bg-white text-dark border mt-2" rows="12" readonly>
+Hi!
 
-                <div class="mt-5">
-                    <h2>Public Key Modulus (N):</h2>
-                    <textarea id="modulus" class="form-control form-control-lg bg-dark text-white border-0 mt-4" rows="6" readonly>{{ message_data.public_key_n }}</textarea>
-                    <button class="btn btn-secondary btn-lg mt-3" onclick="copyToClipboard('modulus')">Copy Modulus</button>
+The following message can only be read when quantum computers are built.
+
+Encrypted Message:
+{{ message_data.ciphertext }}
+
+You will need to factor this number to read the message:
+
+Public Key Modulus (N):
+{{ message_data.public_key_n }}
+
+Public Exponent (e):
+{{ message_data.public_exponent_e }}
+
+Keep this handy too.
+
+Key Generation Time: {{ message_data.key_gen_time }} seconds
+Encryption Time: {{ message_data.encryption_time }} seconds
+
+Return to Quantum Time Capsule to get instructions on how to decrypt your message – but maybe in 2040 or so!
+                    </textarea>
+
+                    <!-- Copy button -->
+                    <div class="mt-3">
+                        <button class="btn btn-secondary btn-lg" onclick="copyToClipboard('emailDraft')">Copy Draft Email</button>
+                    </div>
                 </div>
-
-                <div class="mt-5">
-                    <h2>Public Exponent (e):</h2>
-                    <textarea id="exponent" class="form-control form-control-lg bg-dark text-white border-0" rows="1" readonly>{{ message_data.public_exponent_e }}</textarea>
-                    <button class="btn btn-secondary btn-lg mt-3" onclick="copyToClipboard('exponent')">Copy Exponent</button>
-                </div>
-
-                <div class="mt-4">
-                    <p>Key Generation Time: <strong>{{ message_data.key_gen_time }} seconds</strong></p>
-                    <p>Encryption Time: <strong>{{ message_data.encryption_time }} seconds</strong></p>
-                </div>
-                <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg mt-4">Encrypt Another Message</a>
             </div>
         </section>
 
@@ -74,19 +104,100 @@
         </footer>
     </div>
 
-    <!-- Copy to Clipboard Script -->
-    <script>
-    function copyToClipboard(id) {
-        var copyText = document.getElementById(id);
-        copyText.select();
-        document.execCommand('copy');
-        alert(id.charAt(0).toUpperCase() + id.slice(1) + ' copied to clipboard');
-    }
-    </script>
+    <!-- Demographics Modal -->
+    <div class="modal fade" id="demographicsModal" tabindex="-1" aria-labelledby="demographicsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark text-white">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="demographicsModalLabel">Tell Us About Yourself</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="demographicsForm">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" placeholder="Enter your name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="Enter your email">
+                        </div>
+                        <div class="form-group">
+                            <label for="country">Country</label>
+                            <input type="text" class="form-control" id="country" placeholder="Enter your country">
+                        </div>
+                        <div class="form-group">
+                            <label for="occupation">Occupation</label>
+                            <input type="text" class="form-control" id="occupation" placeholder="Enter your occupation">
+                        </div>
+                        <div class="form-group">
+                            <label for="age">Age</label>
+                            <input type="number" class="form-control" id="age" placeholder="Enter your age">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="submitDemographics()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <!-- jQuery and Bootstrap JS (load these first) -->
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Popper.js 1.16.1 for Bootstrap 4 -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Your custom script (place this after the above scripts) -->
+    <script>
+        // Copy to Clipboard Script
+        function copyToClipboard(id) {
+            var copyText = document.getElementById(id);
+            copyText.select();
+            document.execCommand('copy');
+            alert('Draft email copied to clipboard');
+        }
+
+        // Show the demographics modal when the page loads
+        $(document).ready(function() {
+            console.log('Page is ready, showing modal');
+            $('#demographicsModal').modal('show');
+        });
+
+        function submitDemographics() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const country = document.getElementById('country').value;
+            const occupation = document.getElementById('occupation').value;
+            const age = document.getElementById('age').value;
+
+            $.ajax({
+                type: 'POST',
+                url: '/submit_demographics',
+                data: {
+                    name: name,
+                    email: email,
+                    country: country,
+                    occupation: occupation,
+                    age: age
+                },
+                success: function(response) {
+                    console.log('Demographics submitted:', response);
+                    alert('Demographics submitted successfully!');
+                    $('#demographicsModal').modal('hide');
+                },
+                error: function(error) {
+                    console.error('Error submitting demographics:', error);
+                }
+            });
+        }
+    </script>
 </body>
 </html>
+
