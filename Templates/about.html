@@ -25,13 +25,19 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                    <a class="nav-link" href="{{ url_for('intro') }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('demographics') }}">Demographics</a>
+                    <a class="nav-link" href="{{ url_for('index') }}">Create Capsule</a>
                 </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="{{ url_for('about') }}">About <span class="sr-only">(current)</span></a>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('explore_more') }}">How it works</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('demographics') }}">Who's using</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('about') }}">About Us</a>
                 </li>
             </ul>
         </div>
@@ -45,7 +51,7 @@
             <div class="col-md-6 text-center">
                 <img src="{{ url_for('static', filename='qasim_bedford.jpg') }}" alt="Qasim Bedford" class="rounded-circle profile-pic">
                 <h3 class="mt-3">Qasim Bedford</h3>
-                <p>Qasim is a physics prodigy from UCL with a knack for machine learning and a dream to build quantum computers that can finally solve his Rubik's cube collection. When he's not entangled in quantum algorithms, he's leading his MMA team to victory—proving that physics isn't the only thing he can punch holes in.</p>
+                <p>Qasim is a recent Physics graduate from University College London, specializing in machine learning and quantum computing. He is dedicated to advancing the development of quantum technologies to address complex computational challenges. With a strong foundation in both theoretical and applied physics, Qasim aims to contribute to the creation of quantum computers that can solve intricate problems efficiently. </p>
                 <a href="https://www.linkedin.com/in/qasim-b-2611b21b8/" target="_blank" class="social-icon">
                     <i class="fab fa-linkedin"></i>
                 </a>
@@ -54,7 +60,7 @@
             <div class="col-md-6 text-center">
                 <img src="{{ url_for('static', filename='shashvat_shukla.jpg') }}" alt="Shashvat Shukla" class="rounded-circle profile-pic">
                 <h3 class="mt-3">Shashvat Shukla</h3>
-                <p>Shashvat is a quantum algorithms specialist pursuing his PhD at UCL. He aims to unlock the secrets of the quantum realm before his coffee gets cold. With degrees in philosophy and computer science, he's determined to answer life's big questions—like why his code only works after midnight.</p>
+                <p>Shashvat is a quantum algorithms specialist currently pursuing his PhD at University College London. He is committed to advancing the understanding of quantum mechanics and developing innovative quantum algorithms to address complex computational challenges. With academic backgrounds in both philosophy and computer science, Shashvat brings a unique interdisciplinary perspective to his research, enabling him to explore the theoretical and practical aspects of quantum computing. </p>
                 <a href="https://www.linkedin.com/in/shashvatshukla/" target="_blank" class="social-icon">
                     <i class="fab fa-linkedin"></i>
                 </a>
@@ -76,4 +82,3 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
-
