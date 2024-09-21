@@ -59,13 +59,19 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                    <a class="nav-link" href="{{ url_for('intro') }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('demographics') }}">Demographics</a>
+                    <a class="nav-link" href="{{ url_for('index') }}">Create Capsule</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('about') }}">About</a>
+                    <a class="nav-link" href="{{ url_for('explore_more') }}">How it works</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('demographics') }}">Who's using</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('about') }}">About Us</a>
                 </li>
             </ul>
         </div>
@@ -96,60 +102,33 @@
                 <form id="message-form" method="POST">
                     <!-- Message Input Field -->
                     <div class="form-group position-relative">
-                        <label for="message" class="text-uppercase">Enter your message (max {{ max_characters }} characters):</label>
+                        <label for="message" class="text-uppercase">Enter your secret message (max {{ max_characters }} characters):</label>
                         <textarea name="message" class="form-control form-control-lg text-center bg-dark text-white border-0" rows="6" placeholder="Write your message here..." required>{{ message|default('') }}</textarea>
                         <div class="char-counter"><span id="charCount">0</span>/{{ max_characters }}</div>
                     </div>
 
-                    <!-- Email Field with Client-Side Validation -->
-                    <div class="form-group">
-                        <label for="email" class="text-uppercase">Email Address (optional):</label>
-                        <input type="email" name="email" class="form-control form-control-lg text-center bg-dark text-white border-0"
-                               placeholder="Enter your email address" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
-                        <small class="form-text text-muted">We'll notify you when quantum computers can break RSA encryption.</small>
-                    </div>
-
-                    <!-- Age Field with Client-Side Validation -->
-                    <div class="form-group">
-                        <label for="age" class="text-uppercase">Age:</label>
-                        <input type="number" name="age" class="form-control form-control-lg text-center bg-dark text-white border-0"
-                               placeholder="Enter your age" min="0" max="120">
-                    </div>
-
-                    <!-- Demographic Data (Optional) -->
-                    <div class="form-group">
-                        <label for="subject" class="text-uppercase">Subject of Study:</label>
-                        <input type="text" name="subject" class="form-control form-control-lg text-center bg-dark text-white border-0" placeholder="E.g., Physics, Computer Science">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="country" class="text-uppercase">Country:</label>
-                        <input type="text" name="country" class="form-control form-control-lg text-center bg-dark text-white border-0" placeholder="Enter your country">
-                    </div>
-
-                    <!-- User Consent -->
-                    <div class="form-group form-check mt-4">
-                        <input type="checkbox" class="form-check-input" id="consentCheckbox" required>
-                        <label class="form-check-label" for="consentCheckbox">I consent to the storage and processing of my data as described.</label>
-                    </div>
-
                     <button type="submit" class="btn btn-primary btn-lg mt-3">Encrypt Message</button>
+                    <label for="message">
+                        The message you put above will be encrypted and the key will be destroyed. It can only be read again when a powerful quantum computer is built.
+                    </label>
 
                 </form>
             </div>
         </section>
 
-        <!-- Information Section About Quantum Computing -->
+        <!-- Simplified Information Section About Quantum Computing -->
         <section id="quantum-info" class="py-5 text-white" style="background-color: #222845;">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-6">
-                        <h2>Quantum Computing & RSA</h2>
-                        <p>Quantum computers have the potential to revolutionize encryption by breaking widely-used algorithms like RSA. This project creates a "time capsule" where messages encrypted today can only be decrypted once quantum computers are capable of breaking RSA encryption.</p>
+                        <h2>What is RSA Encryption?</h2>
+                        <p>RSA is one of the most common ways to secure data. It relies on the fact that it’s extremely hard for regular computers to break it because they would need to factor large prime numbers, which is very time-consuming.</p>
+                        <h2>Why Quantum Computers Matter</h2>
+                        <p>Quantum computers are different from regular computers. They use the strange rules of quantum physics to solve problems much faster. In the future, they might be able to break RSA encryption, unlocking data that was once secure.</p>
                         <ul>
-                            <li>RSA uses the difficulty of factoring large prime numbers for encryption.</li>
-                            <li>Quantum computers, with their immense processing power, could break RSA in the future.</li>
-                            <li>Our messages will remain secret until that day comes.</li>
+                            <li>RSA relies on prime number factoring, which is hard for today's computers.</li>
+                            <li>Quantum computers could solve these problems quickly, making RSA vulnerable.</li>
+                            <li>We are creating a "time capsule" of messages that will remain secret until quantum computers can break RSA.</li>
                         </ul>
                     </div>
                     <div class="col-lg-6">
@@ -159,6 +138,7 @@
                 </div>
             </div>
         </section>
+
 
         <!-- Footer Section -->
         <footer class="text-center py-4" style="background-color: #101427;">
@@ -272,7 +252,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             // Get the name from localStorage set in the intro page
             const name = localStorage.getItem('userName');
-            
+
             // Add the name as a hidden input to the form
             const form = document.querySelector('form');
             const hiddenNameInput = document.createElement('input');
