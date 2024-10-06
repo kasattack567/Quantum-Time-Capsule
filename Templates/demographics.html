@@ -1,97 +1,324 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Meta and Title -->
     <meta charset="UTF-8">
     <title>Demographics - Quantum Time Capsule</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Roboto&display=swap" rel="stylesheet">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Custom Stylesheet -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans&family=Red+Hat+Mono&display=swap" rel="stylesheet">
+
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Inline CSS -->
+    <style>
+        /* Apply box-sizing globally */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        /* Reset margins and paddings */
+        html, body {
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+        }
+
+        body {
+            background: conic-gradient(
+                from 59deg,
+                #10182E 0%,
+                #19244A 10%,
+                #252867 20%,
+                #1A3A66 40%,
+                #1B3C4F 60%,
+                #0A1C51 80%,
+                #151D32 100%
+            );
+            background-position: -800px center;
+            background-size: calc(100% + 800px) 100%;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #fff;
+            font-family: 'Roboto', sans-serif;
+            padding-top: 100px; /* Adjust for fixed header */
+        }
+
+        /* Header Bar Styling */
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            font-family: 'Red Hat Mono', monospace;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: transparent;
+            z-index: 1000;
+        }
+
+        .brand-title {
+            font-family: 'Instrument Sans', sans-serif;
+            font-size: 1.875rem;
+            font-weight: 500;
+            text-transform: lowercase;
+            color: #fff;
+            margin: 0;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            font-size: 1rem;
+        }
+
+        .nav-item {
+            color: #d4d4d4;
+            text-decoration: none;
+            text-transform: lowercase;
+            transition: color 0.3s;
+        }
+
+        .nav-item:hover {
+            color: #fff;
+        }
+
+        /* Content Wrapper */
+        .content-wrapper {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        .page-title {
+            font: 400 2.5rem 'Instrument Sans', sans-serif;
+            text-align: center;
+            margin-bottom: 50px;
+            text-transform: lowercase;
+        }
+
+        /* Statistics Section */
+        .stats-section {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .stat-item {
+            flex: 1 1 200px;
+            max-width: 200px;
+            text-align: center;
+            color: #d4d4d4;
+            border: 1px solid #444;
+            border-radius: 10px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-title {
+            font: 400 1.25rem 'Instrument Sans', sans-serif;
+            margin-bottom: 10px;
+            color: #fff;
+            text-transform: lowercase;
+        }
+
+        .stat-value {
+            font: 400 2rem 'Instrument Sans', sans-serif;
+            color: #6fa8dc;
+        }
+
+        /* Chart Containers */
+        .charts-section {
+            display: flex;
+            flex-direction: column;
+            gap: 50px;
+            margin-bottom: 50px;
+        }
+
+        .chart-item {
+            text-align: center;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .chart-title {
+            font: 400 1.5rem 'Instrument Sans', sans-serif;
+            margin-bottom: 20px;
+            color: #fff;
+            text-transform: lowercase;
+        }
+
+        .chart-container {
+            position: relative;
+            margin: 0 auto;
+            height: 400px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .chart-container canvas {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .back-button {
+            background-color: #1a2a9f;
+            color: #fff;
+            padding: 14px 37px;
+            font: 400 1.25rem 'Red Hat Mono', monospace;
+            border: none;
+            border-radius: 19px;
+            text-decoration: none;
+            display: inline-block;
+            text-transform: lowercase;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background-color: #14207d;
+        }
+
+        /* Footer Section */
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            background-color: transparent;
+            color: #d4d4d4;
+            font-family: 'Instrument Sans', sans-serif;
+            margin-top: 50px;
+        }
+
+        /* Media Queries */
+        @media (max-width: 991px) {
+            .header-container {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 10px 20px;
+            }
+
+            .nav-menu {
+                flex-wrap: wrap;
+                gap: 20px;
+                margin-top: 10px;
+            }
+
+            .content-wrapper {
+                padding: 0 20px;
+            }
+
+            .stats-section {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .stat-item {
+                flex: 1 1 100%;
+                max-width: 100%;
+            }
+
+            .charts-section {
+                gap: 30px;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="{{ url_for('index') }}">Quantum Time Capsule</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('intro') }}">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('index') }}">Create Capsule</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('explore_more') }}">How it works</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('demographics') }}">Who's using</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('about') }}">About Us</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+    <header class="header-container">
+        <h1 class="brand-title">quantum time capsule</h1>
+        <nav class="nav-menu">
+            <a href="{{ url_for('index') }}" class="nav-item">new capsule</a>
+            <a href="{{ url_for('explore_more') }}" class="nav-item">how it works</a>
+            <a href="{{ url_for('demographics') }}" class="nav-item">who's using</a>
+            <a href="{{ url_for('about') }}" class="nav-item">about us</a>
+        </nav>
+    </header>
 
     <!-- Demographics Content -->
-    <div class="container mt-5">
-        <h1 class="text-center mb-5">User Demographics</h1>
+    <section class="content-wrapper">
+        <h1 class="page-title">user demographics</h1>
 
-        <!-- Total Users and Average Age -->
-        <div class="row mb-4">
-            <div class="col-md-6 text-center">
-                <h3>Total Users Who Provided Data:</h3>
-                <p>{{ total_users }}</p>
+        <!-- Statistics Section -->
+        <div class="stats-section">
+            <div class="stat-item">
+                <h3 class="stat-title">total users</h3>
+                <p class="stat-value">{{ total_users }}</p>
             </div>
-            <div class="col-md-6 text-center">
-                <h3>Average Age:</h3>
-                <p>{{ average_age|round(1) if average_age else 'N/A' }}</p>
+            <div class="stat-item">
+                <h3 class="stat-title">total messages sent</h3>
+                <p class="stat-value">{{ total_messages }}</p>
+            </div>
+            <div class="stat-item">
+                <h3 class="stat-title">median age</h3>
+                <p class="stat-value">{{ median_age if median_age else 'N/A' }}</p>
+            </div>
+            <div class="stat-item">
+                <h3 class="stat-title">age range</h3>
+                <p class="stat-value">{{ youngest_age }} - {{ oldest_age }}</p>
             </div>
         </div>
 
-        <!-- Subjects of Study Pie Chart -->
-        <div class="row mb-5">
-            <div class="col-md-6 text-center">
-                <h3>Subjects of Study</h3>
-                <canvas id="subjectsChart"></canvas> <!-- Pie chart container -->
+        <!-- Charts Section -->
+        <div class="charts-section">
+            <!-- Top Subjects of Study Chart -->
+            <div class="chart-item">
+                <h3 class="chart-title">top subjects of study</h3>
+                <div class="chart-container">
+                    <canvas id="subjectsChart"></canvas>
+                </div>
             </div>
-            <!-- Countries Pie Chart -->
-            <div class="col-md-6 text-center">
-                <h3>Countries</h3>
-                <canvas id="countriesChart"></canvas> <!-- Pie chart container -->
+
+            <!-- Top Countries Chart -->
+            <div class="chart-item">
+                <h3 class="chart-title">top countries</h3>
+                <div class="chart-container">
+                    <canvas id="countriesChart"></canvas>
+                </div>
             </div>
         </div>
 
-        <div class="text-center mt-5">
-            <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg">Back to Home</a>
+        <div class="button-container">
+            <a href="{{ url_for('index') }}" class="back-button">back to home</a>
         </div>
-    </div>
+    </section>
 
     <!-- Footer Section -->
-    <footer class="text-center py-4" style="background-color: #101427;">
-        <p>&copy; 2024 Quantum Time Capsule. Created with future technology in mind.</p>
+    <footer>
+        <p>&copy; 2024 Quantum Time Capsule. All rights reserved.</p>
     </footer>
 
     <!-- Chart.js Data Population Script -->
     <script>
-    // Subject of Study Pie Chart
+    // Colors array for consistency
+    const colors = [
+        '#6fa8dc', '#e06666', '#f6b26b', '#93c47d', '#76a5af'
+    ];
+
+    // Top Subjects of Study Chart
     const subjectsData = {
-        labels: [{% for subject, count in subjects %}'{{ subject if subject else "Unknown" }}',{% endfor %}],
+        labels: [{% for subject in top_subjects_labels %}'{{ subject }}'{% if not loop.last %}, {% endif %}{% endfor %}],
         datasets: [{
-            label: 'Subjects of Study',
-            data: [{% for subject, count in subjects %}{{ count }},{% endfor %}],
-            backgroundColor: [
-                '#007bff', '#dc3545', '#ffc107', '#28a745', '#17a2b8',
-                '#6c757d', '#6610f2', '#e83e8c', '#fd7e14', '#20c997'
-            ]
+            data: [{% for count in top_subjects_counts %}{{ count }}{% if not loop.last %}, {% endif %}{% endfor %}],
+            backgroundColor: colors,
+            hoverOffset: 4
         }]
     };
 
@@ -100,35 +327,62 @@
         data: subjectsData,
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    position: 'top',
+                    position: 'bottom',
+                    labels: {
+                        color: '#d4d4d4'
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.parsed;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            return `${label}: ${value} users (${percentage}%)`;
+                        }
+                    }
                 }
             }
         }
     };
 
-    // Country Pie Chart
+    // Top Countries Chart
     const countriesData = {
-        labels: [{% for country, count in countries %}'{{ country if country else "Unknown" }}',{% endfor %}],
+        labels: [{% for country in top_countries_labels %}'{{ country }}'{% if not loop.last %}, {% endif %}{% endfor %}],
         datasets: [{
-            label: 'Countries',
-            data: [{% for country, count in countries %}{{ count }},{% endfor %}],
-            backgroundColor: [
-                '#007bff', '#dc3545', '#ffc107', '#28a745', '#17a2b8',
-                '#6c757d', '#6610f2', '#e83e8c', '#fd7e14', '#20c997'
-            ]
+            data: [{% for count in top_countries_counts %}{{ count }}{% if not loop.last %}, {% endif %}{% endfor %}],
+            backgroundColor: colors,
+            hoverOffset: 4
         }]
     };
 
     const countriesConfig = {
-        type: 'pie',
+        type: 'doughnut',
         data: countriesData,
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    position: 'top',
+                    position: 'bottom',
+                    labels: {
+                        color: '#d4d4d4'
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.parsed;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            return `${label}: ${value} users (${percentage}%)`;
+                        }
+                    }
                 }
             }
         }
@@ -142,10 +396,5 @@
         new Chart(countriesCtx, countriesConfig);
     };
     </script>
-
-    <!-- jQuery and Bootstrap JS (Ensure this is at the bottom before the closing </body> tag) -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
