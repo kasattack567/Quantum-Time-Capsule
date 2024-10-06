@@ -1,73 +1,249 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Meta and Title -->
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Encrypted Message - Quantum Time Capsule</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans&family=Red+Hat+Mono&display=swap" rel="stylesheet">
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Your custom styles -->
+
+    <!-- Inline CSS -->
     <style>
+        /* Ensure html and body can grow with content */
+        html, body {
+            min-height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            background-color: black;
-            color: white;
+            background: conic-gradient(
+                from 59deg, /* Starting angle */
+                #10182E 0%,
+                #19244A 10%,
+                #252867 20%,
+                #1A3A66 40%,
+                #1B3C4F 60%,
+                #0A1C51 80%,
+                #151D32 100%
+            );
+            background-position: center; /* Center the gradient */
+            background-size: 100% 100%; /* Stretch background to fill body */
+            background-repeat: no-repeat; /* Prevent repetition of the gradient */
+            background-attachment: fixed; /* Keep background fixed */
+            color: #fff; /* Set text color to white */
+            font-family: 'Roboto', sans-serif;
+            padding-top: 70px; /* Prevent content overlap with navbar */
         }
 
+        h1, h2, h3, h4 {
+            font-family: "Instrument Sans", sans-serif;
+            color: #fff; /* Light text color */
+        }
+
+        p, label {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #d4d4d4; /* Light gray text color */
+        }
+
+        /* Navigation bar styling */
+        .header-container {
+            display: flex;
+            width: 100%;
+            gap: 20px;
+            justify-content: space-between;
+            align-items: center; /* Vertically center the items */
+            padding: 20px 40px;
+            font-family: 'Red Hat Mono', monospace; /* Updated font family */
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: transparent;
+            z-index: 1000;
+        }
+
+        .brand-title {
+            font-family: 'Instrument Sans', sans-serif; /* Updated font family */
+            font-size: 1.875rem; /* Equivalent to 30px */
+            font-weight: 500;
+            text-transform: lowercase;
+            color: #fff;
+            margin: 0;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            font-size: 1rem; /* Equivalent to 16px */
+        }
+
+        .nav-item {
+            color: #d4d4d4;
+            text-decoration: none;
+            text-transform: lowercase;
+            transition: color 0.3s;
+        }
+
+        .nav-item:hover {
+            color: #fff;
+        }
+
+        /* Container and Text Styling */
+        .container, .container-fluid {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Email Draft Textarea */
+        #emailDraft {
+            background-color: #1e1e1e; /* Dark background */
+            color: #d4d4d4; /* Light text color */
+            font-family: "Red Hat Mono", monospace;
+            font-size: 1rem;
+            resize: none;
+            border: 1px solid #444;
+        }
+
+        /* Button Styling */
+        .btn-secondary {
+            background-color: #1a2a9f;
+            border-color: #1a2a9f;
+            font-family: "Red Hat Mono", monospace;
+            color: #fff;
+            text-transform: lowercase;
+        }
+
+        .btn-secondary:hover {
+            background-color: #14207d;
+            border-color: #14207d;
+        }
+
+        /* Footer Section */
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            background-color: transparent; /* Match navbar background */
+            color: #d4d4d4;
+            font-family: "Roboto", sans-serif;
+            margin-top: 40px;
+        }
+
+        /* Modal Styling */
+        .modal-content {
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+        }
+
+        .modal-header, .modal-footer {
+            border: none;
+        }
+
+        .modal-title {
+            font-family: "Instrument Sans", sans-serif;
+            color: #fff;
+            text-transform: lowercase;
+        }
+
+        /* Form Control Styling */
         .form-control {
-            color: black; /* Change text color inside text boxes */
+            background-color: #2e2e2e;
+            color: #d4d4d4;
+            font-size: 1rem;
+            border: 1px solid #444;
         }
 
-        .container, h1, p, h4, .form-check-label {
-            color: white; /* Ensure all general text is white */
+        .form-control::placeholder {
+            color: #6c757d;
         }
 
-        .bg-light {
-            background-color: #f8f9fa !important; /* Lighter background for the text areas */
+        /* Close Button Styling in Modal */
+        .close {
+            color: #fff;
+            opacity: 0.8;
+        }
+
+        .close:hover {
+            color: #fff;
+            opacity: 1;
+        }
+
+        /* Adjust margins */
+        .mt-2 {
+            margin-top: 1rem !important;
+        }
+
+        .mt-3 {
+            margin-top: 1.5rem !important;
+        }
+
+        .mt-4 {
+            margin-top: 2rem !important;
+        }
+
+        .py-5 {
+            padding-top: 3rem !important;
+            padding-bottom: 3rem !important;
+        }
+
+        /* Adjust textarea height */
+        #emailDraft {
+            height: auto;
+            min-height: 300px;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            #emailDraft {
+                font-size: 0.9rem;
+            }
+
+            .header-container {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 10px 20px;
+            }
+
+            .nav-menu {
+                flex-wrap: wrap;
+                gap: 20px;
+                margin-top: 10px;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="{{ url_for('index') }}">Quantum Time Capsule</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('intro') }}">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('index') }}">Create Capsule</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('explore_more') }}">How it works</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('demographics') }}">Who's using</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('about') }}">About Us</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+    <header class="header-container">
+        <h1 class="brand-title">quantum time capsule</h1>
+        <nav class="nav-menu">
+            <a href="{{ url_for('index') }}" class="nav-item">new capsule</a>
+            <a href="{{ url_for('explore_more') }}" class="nav-item">how it works</a>
+            <a href="{{ url_for('demographics') }}" class="nav-item">who's using</a>
+            <a href="{{ url_for('about') }}" class="nav-item">about us</a>
+        </nav>
+    </header>
 
-    <div class="container-fluid py-5">
+    <div class="container-fluid py-5" style="padding-top: 140px;">
         <!-- Pre-written Email Section -->
         <section id="prewritten-email" class="text-center">
             <div class="container">
-                <h1 class="mb-4">Quantum Time Capsule</h1>
-                <p>Copy this draft email to send to your friends</p>
+                <h1 class="mb-4"> >> encrypted message</h1>
+                <p>copy this draft email to send to your friends</p>
 
-                <div class="border p-4 bg-light">
+                <div class="border p-4" style="background-color: rgba(30, 30, 30, 0.8);">
+                    <!-- Hidden input to store message_id -->
+                    <input type="hidden" id="message_id" value="{{ message_data.message_id }}">
+
                     <!-- Draft Email Content -->
-                    <textarea id="emailDraft" class="form-control form-control-lg bg-white text-dark border mt-2" rows="12" readonly>
-Hi!
+                    <textarea id="emailDraft" class="form-control mt-2" rows="12" readonly>
+Hi,
 
 The following message can only be read when quantum computers are built.
 
@@ -92,14 +268,14 @@ Return to Quantum Time Capsule to get instructions on how to decrypt your messag
 
                     <!-- Copy button -->
                     <div class="mt-3">
-                        <button class="btn btn-secondary btn-lg" onclick="copyToClipboard('emailDraft')">Copy Draft Email</button>
+                        <button class="btn btn-secondary btn-lg" onclick="copyToClipboard('emailDraft')">copy draft email</button>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Footer Section -->
-        <footer class="text-center py-4" style="background-color: #101427;">
+        <footer>
             <p>&copy; 2024 Quantum Time Capsule. Created with future technology in mind.</p>
         </footer>
     </div>
@@ -107,40 +283,40 @@ Return to Quantum Time Capsule to get instructions on how to decrypt your messag
     <!-- Demographics Modal -->
     <div class="modal fade" id="demographicsModal" tabindex="-1" aria-labelledby="demographicsModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content bg-dark text-white">
+            <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="demographicsModalLabel">Tell Us About Yourself</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                    <h5 class="modal-title">tell us about yourself</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" style="color: #fff;">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <form id="demographicsForm">
                         <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" id="name" placeholder="Enter your name">
+                            <label for="name">name (optional)</label>
+                            <input type="text" class="form-control" id="name" placeholder="enter your name">
                         </div>
                         <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" class="form-control" id="email" placeholder="Enter your email">
+                            <label for="email">email (optional)</label>
+                            <input type="email" class="form-control" id="email" placeholder="enter your email">
                         </div>
                         <div class="form-group">
-                            <label for="country">Country</label>
-                            <input type="text" class="form-control" id="country" placeholder="Enter your country">
+                            <label for="country">country (optional)</label>
+                            <input type="text" class="form-control" id="country" placeholder="enter your country">
                         </div>
                         <div class="form-group">
-                            <label for="occupation">Occupation</label>
-                            <input type="text" class="form-control" id="occupation" placeholder="Enter your occupation">
+                            <label for="occupation">occupation/field of study (optional)</label>
+                            <input type="text" class="form-control" id="occupation" placeholder="enter your occupation or field of study">
                         </div>
                         <div class="form-group">
-                            <label for="age">Age</label>
-                            <input type="number" class="form-control" id="age" placeholder="Enter your age">
+                            <label for="age">age (optional)</label>
+                            <input type="number" class="form-control" id="age" placeholder="enter your age">
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="submitDemographics()">Submit</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">skip</button>
+                    <button type="button" class="btn btn-primary" onclick="submitDemographics()">submit</button>
                 </div>
             </div>
         </div>
@@ -149,7 +325,7 @@ Return to Quantum Time Capsule to get instructions on how to decrypt your messag
     <!-- jQuery and Bootstrap JS (load these first) -->
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Popper.js 1.16.1 for Bootstrap 4 -->
+    <!-- Popper.js for Bootstrap 4 -->
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -160,6 +336,7 @@ Return to Quantum Time Capsule to get instructions on how to decrypt your messag
         function copyToClipboard(id) {
             var copyText = document.getElementById(id);
             copyText.select();
+            copyText.setSelectionRange(0, 99999); /* For mobile devices */
             document.execCommand('copy');
             alert('Draft email copied to clipboard');
         }
@@ -171,16 +348,20 @@ Return to Quantum Time Capsule to get instructions on how to decrypt your messag
         });
 
         function submitDemographics() {
+            const message_id = document.getElementById('message_id').value;
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const country = document.getElementById('country').value;
             const occupation = document.getElementById('occupation').value;
             const age = document.getElementById('age').value;
 
+            console.log('Submitting demographics:', { message_id, name, email, country, occupation, age });
+
             $.ajax({
                 type: 'POST',
                 url: '/submit_demographics',
                 data: {
+                    message_id: message_id,
                     name: name,
                     email: email,
                     country: country,
@@ -189,15 +370,15 @@ Return to Quantum Time Capsule to get instructions on how to decrypt your messag
                 },
                 success: function(response) {
                     console.log('Demographics submitted:', response);
-                    alert('Demographics submitted successfully!');
+                    alert('Thank you for your submission!');
                     $('#demographicsModal').modal('hide');
                 },
                 error: function(error) {
                     console.error('Error submitting demographics:', error);
+                    alert('Error submitting demographics. Please try again.');
                 }
             });
         }
     </script>
 </body>
 </html>
-
