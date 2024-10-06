@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta and Title -->
+    <meta charset="UTF-8">
+    <title>How It Works - Quantum Time Capsule</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans&family=Red+Hat+Mono&display=swap" rel="stylesheet">
+
+    <!-- Inline CSS -->
+    <style>
+        /* Apply box-sizing globally to include padding and border in width and height calculations */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        /* Reset margins and paddings */
+        html, body {
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+        }
+
+        body {
+            background: conic-gradient(
+                from 59deg,
+                #10182E 0%,
+                #19244A 10%,
+                #252867 20%,
+                #1A3A66 40%,
+                #1B3C4F 60%,
+                #0A1C51 80%,
+                #151D32 100%
+            );
+            background-position: -800px center;
+            background-size: calc(100% + 800px) 100%;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #fff;
+            font-family: 'Roboto', sans-serif;
+            padding-top: 100px; /* Adjust for fixed header */
+        }
+
+        /* Header Bar Styling */
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            font-family: 'Red Hat Mono', monospace;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0; /* Ensure the header spans the full width */
+            background-color: transparent;
+            z-index: 1000;
+        }
+
+        .brand-title {
+            font-family: 'Instrument Sans', sans-serif;
+            font-size: 1.875rem;
+            font-weight: 500;
+            text-transform: lowercase;
+            color: #fff;
+            margin: 0;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            font-size: 1rem;
+        }
+
+        .nav-item {
+            color: #d4d4d4;
+            text-decoration: none;
+            text-transform: lowercase;
+            transition: color 0.3s;
+        }
+
+        .nav-item:hover {
+            color: #fff;
+        }
+
+        .quantum-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #fff;
+            line-height: 1.6;
+            padding: 0 40px;
+        }
+
+        @media (max-width: 991px) {
+            .header-container {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 10px 20px;
+            }
+
+            .nav-menu {
+                flex-wrap: wrap;
+                gap: 20px;
+                margin-top: 10px;
+            }
+
+            .quantum-section {
+                padding: 0 20px 100px;
+            }
+        }
+
+        .content-wrapper {
+            max-width: 1200px;
+            width: 100%;
+            margin-top: 20px;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            border-radius: 27px;
+            background-color: rgba(254, 254, 254, 0);
+            margin: 50px 0 10px 0;
+            padding: 20px 33px;
+            font: 400 2rem 'Instrument Sans', sans-serif;
+            text-align: left;
+            border: 1px solid #fff;
+            color: #fff;
+            display: inline-block;
+            text-transform: lowercase;
+        }
+
+        .section-description {
+            color: #d4d4d4;
+            margin-top: 0px;
+            font: 400 1.125rem/1.6 'Instrument Sans', sans-serif;
+            text-align: left;
+        }
+
+        .code-example, .code-block {
+            color: #d4d4d4;
+            margin-top: 20px;
+            font: 400 1.125rem/1.6 'Red Hat Mono', monospace;
+            background-color: #1c1c1c;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: left;
+            overflow-x: auto;
+        }
+
+        a {
+            color: #6fa8dc;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<section class="quantum-section">
+    <!-- Navigation Bar -->
+    <header class="header-container">
+        <h1 class="brand-title">quantum time capsule</h1>
+        <nav class="nav-menu">
+            <a href="{{ url_for('index') }}" class="nav-item">new capsule</a>
+            <a href="{{ url_for('explore_more') }}" class="nav-item">how it works</a>
+            <a href="{{ url_for('demographics') }}" class="nav-item">who's using</a>
+            <a href="{{ url_for('about') }}" class="nav-item">about us</a>
+        </nav>
+    </header>
+
+    <div class="content-wrapper">
+        <!-- First Section -->
+        <h2 class="section-title">how it works</h2>
+        <p class="section-description">
+            The goal of this website is to get people involved and excited about progress in quantum computing.
+            If a large quantum computer is built tomorrow – what would you do with it?
+            This website gives you at least one possibility – you can use this website to create messages that can only be decrypted using a quantum computer!
+        </p>
+
+        <!-- Second Section -->
+        <h2 class="section-title">what are quantum computers?</h2>
+        <p class="section-description">
+            Quantum computers are a new kind of computer that is very fast, but only for solving some kinds of problems.
+            Unlike today’s computers, which process information in binary (0s and 1s), quantum computers use a paradigm inspired by quantum physics, which allows them to solve some problems much faster.
+            Scientists and engineers are working to build large and reliable quantum computers, though we currently have only small and error-prone prototypes.
+            Computer scientists are also exploring ways to apply quantum computers to a wider range of problems.
+        </p>
+
+        <!-- Third Section -->
+        <h2 class="section-title">what is cryptography?</h2>
+        <p class="section-description">
+            Cryptography ensures secure communication over the internet. When we encrypt a message, it becomes garbled to anyone without the secret key:
+        </p>
+        <p class="code-block">Hello -&gt; (*M#^ND#_&amp;N#(hu49#j</p>
+        <p class="section-description">
+            It requires immense computational power to decrypt the message without the proper key. Only the intended receiver, who possesses the secret key, can easily decrypt the message.
+        </p>
+
+        <!-- Fourth Section -->
+        <h2 class="section-title">quantum computers can break cryptographic algorithms?</h2>
+        <p class="section-description">
+            Yes, quantum computers can break certain encryption algorithms, including RSA, which is widely used today.
+        </p>
+        <p class="section-description">
+            The security of RSA relies on the difficulty of factorizing large numbers, whereas multiplying numbers is straightforward. For example, if I tell you I multiplied two numbers to get 62710561, determining which two numbers I used is difficult. However, if I tell you to multiply 7919 and 7919, you can easily compute the result.
+            Quantum computers can factorize large numbers efficiently, undermining the security of RSA.
+        </p>
+
+        <!-- Fifth Section -->
+        <h2 class="section-title">does that mean quantum computers will allow us to read all messages?</h2>
+        <p class="section-description">
+            Not necessarily. We are transitioning from RSA to quantum-resistant cryptographic systems. Quantum computers can only solve specific problems quickly. Once we adopt these new cryptographic methods, messages will remain secure even when large quantum computers are built.
+        </p>
+        <p class="section-description">
+            This website deliberately uses RSA to encrypt messages so that they are secure today but can be broken once powerful quantum computers become available.
+        </p>
+
+        <!-- Sixth Section -->
+        <h2 class="section-title">when will the messages be readable?</h2>
+        <p class="section-description">
+            Once a large quantum computer with about 15,000 qubits (with negligible noise) is built, it will become possible to decrypt these messages (see <a href="https://arxiv.org/abs/1905.09749">arXiv paper</a>). However, advancements may reduce the required number of qubits.
+        </p>
+        <p class="section-description">
+            This could happen in the next 15 to 30 years (see <a href="https://globalriskinstitute.org/publication/quantum-threat-timeline/">Quantum Threat Timeline</a>). When this occurs, you will likely hear about it in the news. If you provide us with your email address, we'll notify you, or you can check back on this website.
+        </p>
+
+        <!-- Seventh Section -->
+        <h2 class="section-title">how can i decrypt the message?</h2>
+        <p class="section-description">
+            Currently, you cannot decrypt the message. We don't expect decryption to be feasible for at least the next 15 years. Once large quantum computers are operational, we'll provide tools on this website to help you decrypt your message, or you can use the RSA cryptosystem yourself.
+        </p>
+
+        <!-- Eighth Section -->
+        <h2 class="section-title">that's so far in the future!</h2>
+        <p class="section-description">
+            Yes, it is! But now you have one more reason to look forward to the advancements in quantum computing.
+        </p>
+    </div>
+</section>
+</body>
+</html>
