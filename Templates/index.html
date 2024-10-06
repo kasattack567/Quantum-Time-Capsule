@@ -1,25 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Meta and Title -->
     <meta charset="UTF-8">
     <title>Quantum Time Capsule</title>
-    <!-- Google Fonts for Futuristic Typography -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Roboto&display=swap" rel="stylesheet">
-    <!-- Bootstrap for layout -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Custom Stylesheet -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <!-- Inline CSS for character counter positioning -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans&family=Red+Hat+Mono&display=swap" rel="stylesheet">
+
+    <!-- Inline CSS -->
     <style>
-        .char-counter {
-            position: absolute;
-            bottom: 10px;
-            right: 15px;
-            font-size: 0.9em;
-            color: #6c757d;
+        /* Ensure html and body can grow with content */
+        html, body {
+            min-height: 100%;
+            margin: 0;
+            padding: 0;
         }
-        .position-relative {
-            position: relative;
+
+        body {
+            background: conic-gradient(
+                from 59deg, /* Starting angle */
+                #10182E 0%,
+                #19244A 10%,
+                #252867 20%,
+                #1A3A66 40%,
+                #1B3C4F 60%,
+                #0A1C51 80%,
+                #151D32 100%
+            );
+            background-position: -800px center; /* Shift the background to the left */
+            background-size: calc(100% + 800px) 100%; /* Increase background width */
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #fff;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .quantum-capsule {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center the content */
+            color: #fff;
+            line-height: 1;
+            padding: 0 40px; /* Removed top padding */
+        }
+
+        @media (max-width: 991px) {
+            .quantum-capsule {
+                padding: 0 20px 100px;
+            }
+        }
+
+        /* Header Bar Styling */
+        .header-container {
+            display: flex;
+            width: 100%;
+            gap: 20px;
+            justify-content: space-between;
+            align-items: center; /* Vertically center the items */
+            padding: 20px 0;
+            font-family: 'Red Hat Mono', monospace; /* Updated font family */
+            font-size: 1rem; /* Adjusted font size */
+        }
+
+        .brand-title {
+            font-family: 'Instrument Sans', sans-serif; /* Updated font family */
+            font-size: 1.875rem; /* Equivalent to 30px */
+            font-weight: 500;
+            text-transform: lowercase;
+            color: #fff;
+            margin: 0;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            font-size: 1rem; /* Equivalent to 16px */
+        }
+
+        .nav-item {
+            color: #d4d4d4;
+            text-decoration: none;
+            text-transform: lowercase;
+            transition: color 0.3s;
+        }
+
+        .nav-item:hover {
+            color: #fff;
+        }
+
+        .secret-message-prompt {
+            text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+            margin-top: 80px;
+            font: 400 2.5rem 'Instrument Sans', sans-serif; /* Adjusted font size */
+            text-align: center;
+            text-transform: lowercase;
+        }
+
+        .message-container {
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 20px;
+            padding: 0 20px;
+        }
+
+        .message-description {
+            color: #d4d4d4;
+            font: 400 1.125rem 'Instrument Sans', sans-serif; /* Adjusted font size */
+            text-align: left;
+            margin: 0 auto;
+            max-width: 100%;
+        }
+
+        .message-description .highlight {
+            color: #599bff;
+            cursor: pointer;
+            text-decoration: none; /* Added to remove underline */
+        }
+
+        .message-input {
+            border-radius: 27px;
+            background-color: transparent;
+            margin-top: 20px;
+            width: 100%;
+            color: #b7b7b7;
+            padding: 23px 34px;
+            font: 400 1.25rem 'Red Hat Mono', monospace; /* Adjusted font size */
+            border: 1px solid #fff;
+            resize: none;
+            box-sizing: border-box;
+            min-height: 200px;
+        }
+
+        .message-input::placeholder {
+            color: #b7b7b7;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .encrypt-button {
+            border-radius: 19px;
+            background-color: #1a2a9f;
+            padding: 14px 37px;
+            font: 400 1.25rem 'Red Hat Mono', monospace; /* Adjusted font size */
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            text-transform: lowercase;
+        }
+
+        .encrypt-button:hover {
+            background-color: #14207d;
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
         }
 
         /* Matrix Loading Screen CSS */
@@ -27,8 +176,8 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
             background: black;
             display: flex;
             justify-content: center;
@@ -45,139 +194,95 @@
             visibility: visible;
         }
 
-        canvas { display: block; }
+        canvas {
+            display: block;
+        }
+
+        @media (max-width: 991px) {
+            .header-container {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .nav-menu {
+                gap: 20px;
+            }
+
+            .secret-message-prompt {
+                margin-top: 40px;
+            }
+
+            .message-container {
+                width: 100%;
+                padding: 0 10px;
+            }
+
+            .button-container {
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="{{ url_for('index') }}">Quantum Time Capsule</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('intro') }}">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('index') }}">Create Capsule</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('explore_more') }}">How it works</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('demographics') }}">Who's using</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('about') }}">About Us</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
-    <div class="container-fluid">
-        <!-- Header Section -->
-        <header class="text-center py-5">
-            <h1 class="display-4 text-uppercase">Quantum Time Capsule</h1>
-            <p class="lead">Create a message that can only be read when quantum computers can break RSA encryption.</p>
+    <section class="quantum-capsule">
+        <!-- Navigation Bar -->
+        <header class="header-container">
+            <h1 class="brand-title">quantum time capsule</h1>
+            <nav class="nav-menu">
+                <a href="{{ url_for('index') }}" class="nav-item">new capsule</a>
+                <a href="{{ url_for('explore_more') }}" class="nav-item">how it works</a>
+                <a href="{{ url_for('demographics') }}" class="nav-item">who's using</a>
+                <a href="{{ url_for('about') }}" class="nav-item">about us</a>
+            </nav>
         </header>
 
-        <!-- Message Section -->
-        <section id="message" class="text-center py-5">
-            <div class="container">
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                  {% if messages %}
-                    {% for category, message in messages %}
-                      <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                    {% endfor %}
-                  {% endif %}
-                {% endwith %}
-                <form id="message-form" method="POST">
-                    <!-- Message Input Field -->
-                    <div class="form-group position-relative">
-                        <label for="message" class="text-uppercase">Enter your secret message (max {{ max_characters }} characters):</label>
-                        <textarea name="message" class="form-control form-control-lg text-center bg-dark text-white border-0" rows="6" placeholder="Write your message here..." required>{{ message|default('') }}</textarea>
-                        <div class="char-counter"><span id="charCount">0</span>/{{ max_characters }}</div>
-                    </div>
+        <!-- Secret Message Prompt -->
+        <h2 class="secret-message-prompt">&gt;&gt; enter your secret message</h2>
 
-                    <button type="submit" class="btn btn-primary btn-lg mt-3">Encrypt Message</button>
-                    <label for="message">
-                        The message you put above will be encrypted and the key will be destroyed. It can only be read again when a powerful quantum computer is built.
-                    </label>
+        <!-- Message Container -->
+        <div class="message-container">
+            <!-- Message Description -->
+            <p class="message-description">
+                this message will only be read when quantum computers can break RSA encryption.
+                <!-- Updated the "find out more" text to be a link -->
+                <a href="{{ url_for('explore_more') }}" class="highlight">find out more</a>
+            </p>
 
-                </form>
-            </div>
-        </section>
-
-        <!-- Simplified Information Section About Quantum Computing -->
-        <section id="quantum-info" class="py-5 text-white" style="background-color: #222845;">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <h2>What is RSA Encryption?</h2>
-                        <p>RSA is one of the most common ways to secure data. It relies on the fact that it’s extremely hard for regular computers to break it because they would need to factor large prime numbers, which is very time-consuming.</p>
-                        <h2>Why Quantum Computers Matter</h2>
-                        <p>Quantum computers are different from regular computers. They use the strange rules of quantum physics to solve problems much faster. In the future, they might be able to break RSA encryption, unlocking data that was once secure.</p>
-                        <ul>
-                            <li>RSA relies on prime number factoring, which is hard for today's computers.</li>
-                            <li>Quantum computers could solve these problems quickly, making RSA vulnerable.</li>
-                            <li>We are creating a "time capsule" of messages that will remain secret until quantum computers can break RSA.</li>
-                        </ul>
-                    </div>
-                    <div class="col-lg-6">
-                        <!-- Image for Quantum Computing -->
-                        <img src="{{ url_for('static', filename='quantum_computing_image.jpg') }}" alt="Quantum Computing Graphic" class="img-fluid rounded shadow">
-                    </div>
+            <!-- Message Form -->
+            <form id="message-form" method="POST">
+                <label for="secretMessage" class="visually-hidden">Write your secret message</label>
+                <textarea id="secretMessage" name="message" class="message-input" placeholder="Write your message here..." aria-label="Write your secret message" required>{{ message|default('') }}</textarea>
+                <div class="button-container">
+                    <button type="submit" class="encrypt-button">encrypt</button>
                 </div>
-            </div>
-        </section>
-
-
-        <!-- Footer Section -->
-        <footer class="text-center py-4" style="background-color: #101427;">
-            <p>&copy; 2024 Quantum Time Capsule. Created with future technology in mind.</p>
-        </footer>
-    </div>
+            </form>
+        </div>
+    </section>
 
     <!-- Matrix Loading Screen -->
     <div id="loading-screen" class="loading-screen">
         <canvas id="c"></canvas>
     </div>
 
-    <!-- Bootstrap and jQuery -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
     <!-- JavaScript for Character Counter and Byte Limit -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var textarea = document.querySelector('textarea[name="message"]');
-        var maxCharacters = {{ max_characters }};
-        var maxBytes = 446;  // Maximum message size in bytes
-        var charCountSpan = document.getElementById('charCount');
+        document.addEventListener('DOMContentLoaded', function() {
+            var textarea = document.getElementById('secretMessage');
+            var maxCharacters = {{ max_characters }};
+            var maxBytes = 446;  // Maximum message size in bytes
 
-        textarea.addEventListener('input', function() {
-            var message = textarea.value;
-            var messageLength = message.length;
-            var encoder = new TextEncoder();
-            var bytes = encoder.encode(message).length;
+            textarea.addEventListener('input', function() {
+                var message = textarea.value;
+                var messageLength = message.length;
+                var encoder = new TextEncoder();
+                var bytes = encoder.encode(message).length;
 
-            charCountSpan.textContent = messageLength;
-
-            if (messageLength > maxCharacters || bytes > maxBytes) {
-                textarea.value = message.substring(0, messageLength - 1);
-                charCountSpan.textContent = textarea.value.length;
-            }
+                if (messageLength > maxCharacters || bytes > maxBytes) {
+                    textarea.value = message.substring(0, messageLength - 1);
+                }
+            });
         });
-    });
     </script>
 
     <!-- Matrix Animation Script -->
@@ -186,34 +291,34 @@
         var c = document.getElementById("c");
         var ctx = c.getContext("2d");
 
-        //making the canvas full screen
+        // Making the canvas full screen
         c.height = window.innerHeight;
         c.width = window.innerWidth;
 
-        //characters for the animation
+        // Characters for the animation
         var matrix = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}";
         matrix = matrix.split("");
 
         var font_size = 10;
-        var columns = c.width / font_size; //number of columns for the rain
+        var columns = c.width / font_size; // Number of columns for the rain
         var drops = [];
         for (var x = 0; x < columns; x++) drops[x] = 1;
 
         function draw() {
-            //translucent BG to show trail
+            // Translucent BG to show trail
             ctx.fillStyle = "rgba(0, 0, 0, 0.04)";
             ctx.fillRect(0, 0, c.width, c.height);
 
-            ctx.fillStyle = "#f4427d"; // pink text
+            ctx.fillStyle = "#599bff"; // Light blue text
             ctx.font = font_size + "px arial";
             for (var i = 0; i < drops.length; i++) {
                 var text = matrix[Math.floor(Math.random() * matrix.length)];
                 ctx.fillText(text, i * font_size, drops[i] * font_size);
 
-                //sending the drop back to the top randomly after it has crossed the screen
+                // Sending the drop back to the top randomly after it has crossed the screen
                 if (drops[i] * font_size > c.height && Math.random() > 0.975) drops[i] = 0;
 
-                //incrementing Y coordinate
+                // Incrementing Y coordinate
                 drops[i]++;
             }
         }
@@ -224,7 +329,7 @@
     <!-- JavaScript for Loading Screen and Form Submission -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const form = document.querySelector('form');
+            const form = document.getElementById('message-form');
             const loadingScreen = document.getElementById('loading-screen');
 
             form.addEventListener('submit', function (event) {
@@ -254,7 +359,7 @@
             const name = localStorage.getItem('userName');
 
             // Add the name as a hidden input to the form
-            const form = document.querySelector('form');
+            const form = document.getElementById('message-form');
             const hiddenNameInput = document.createElement('input');
             hiddenNameInput.type = 'hidden';
             hiddenNameInput.name = 'name';
