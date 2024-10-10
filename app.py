@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -9,28 +10,25 @@ import time
 import uuid
 import logging
 from email_validator import validate_email, EmailNotValidError
-from flask_mail import Mail, Message as MailMessage
 
 # Initialize the Flask app
 app = Flask(__name__)
 
 # Set a secret key for session management and flash messages
-app.secret_key = 'f21b2c6b9d2b4a6b8d2c8f7c1e4d3b8a'  # Replace with a secure key if needed
+app.secret_key = os.environ.get('SECRET_KEY', 'default_secret_key')  # Replace 'default_secret_key' with a secure key
 
-# MySQL database configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://kasattack567:Rayhanqasim2!@kasattack567.mysql.pythonanywhere-services.com/kasattack567$default'
+# MySQL database configuration using environment variables
+db_username = os.environ.get('DB_USERNAME')
+db_password = os.environ.get('DB_PASSWORD')
+db_host = os.environ.get('DB_HOST')
+db_name = os.environ.get('DB_NAME')
+
+if not all([db_username, db_password, db_host, db_name]):
+    raise ValueError("Database environment variables are not fully set.")
+
+app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+mysqlconnector://{db_username}:{db_password}@{db_host}/{db_name}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Flask-Mail configuration
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_USERNAME'] = 'quantumtimecapsule@gmail.com'  # Replace with your email
-app.config['MAIL_PASSWORD'] = 'siee zwea fawl txrx'  # Replace with your email password
-app.config['MAIL_DEFAULT_SENDER'] = 'quantumtimecapsule@gmail.com'  # Replace with your email
-
-mail = Mail(app)  # Initialize Flask-Mail
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
@@ -119,7 +117,7 @@ def index():
         message_length = len(message_text)
 
         if message_length > max_characters:
-            return render_template('index.html', error="Message is too long. Maximum length is {} characters.".format(max_characters))
+            return render_template('index.html', error=f"Message is too long. Maximum length is {max_characters} characters.")
 
         if len(message) > max_message_size:
             return render_template('index.html', error="Message is too long due to the characters used. Please shorten your message.")
@@ -291,6 +289,7 @@ def demographics():
         top_countries_labels=top_countries_labels,
         top_countries_counts=top_countries_counts
     )
+
 # Route to handle demographic form submission via AJAX
 @app.route('/submit_demographics', methods=['POST'])
 def submit_demographics():
@@ -339,4 +338,5 @@ def about():
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()  # Ensures the tables exist
-    app.run(debug=True, port=5002)  # Specify the port directly
+    port = int(os.environ.get('PORT', 8080))  # Use the PORT environment variable or default to 8080
+    app.run(host='0.0.0.0', port=port, debug=True)
