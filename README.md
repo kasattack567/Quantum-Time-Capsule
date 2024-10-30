@@ -1,22 +1,14 @@
 # Quantum Time Capsule
 
-Welcome to the **Quantum Time Capsule** project! This repository contains the code for a web-based application that simulates the concept of storing and retrieving messages across time using quantum principles.
-
-## 📖 Project Overview
-
-The **Quantum Time Capsule** is a unique web application designed to illustrate the concept of quantum time capsules. It combines principles of quantum mechanics with digital technology to create an engaging and educational experience.
+Welcome to the **Quantum Time Capsule** project! This repository contains the code for a web-based application that simulates a time capsule experience, where messages are encrypted with RSA and can only be decrypted in the future once quantum computing has advanced enough to break the encryption.
 
 ## 🎯 Purpose
 
+The Quantum Time Capsule offers users a way to send messages encrypted with RSA, designed to stay secure until quantum computers reach the capability to decrypt them. This highlights both the robustness of RSA encryption and the fascinating possibilities of future quantum advancements.
 
 ## 🌟 Features
 
-- **Create Messages:** Users can compose messages to be stored in the quantum time capsule.
-- **Retrieve Messages:** Users can view messages that were created in different times based on simulation parameters.
-- **Interactive Interface:** A user-friendly design with visual elements that simulate quantum effects.
-- **Educational Content:** Explanations of the quantum concepts underlying the simulation.
-
-
-Finish off the rest 
-
-need to add/map user flow - ux
+- **Create Messages:** Users can compose and encrypt messages to be stored securely in the time capsule.
+- **Future Retrieval:** Messages remain inaccessible until future quantum computing power can theoretically break the encryption.
+- **Interactive Interface:** A user-friendly design with futuristic elements to enhance the experience.
+- **Educational Content:** Information about RSA encryption and how future quantum computing could impact cryptography.
