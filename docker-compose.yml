@@ -6,10 +6,10 @@ services:
     container_name: mysql_db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: BigPassword
-      MYSQL_DATABASE: db
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - db_data:/var/lib/mysql
     ports:
@@ -23,11 +23,11 @@ services:
     depends_on:
       - db
     environment:
-      - DB_USERNAME=user
-      - DB_PASSWORD=password
-      - DB_HOST=db
-      - DB_NAME=db
-      - SECRET_KEY=J4F3K2n!t92heJds91kVd8@2LkfjQf&22
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ${DB_NAME}
+      SECRET_KEY: ${SECRET_KEY}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.flask_app.rule=Host(`quantumtimecapsule.com`)"
