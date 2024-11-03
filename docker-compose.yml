@@ -14,6 +14,8 @@ services:
       - db_data:/var/lib/mysql
     ports:
       - "3306:3306"
+    networks:
+      - webnet
 
   web:
     build:
@@ -30,15 +32,17 @@ services:
       SECRET_KEY: ${SECRET_KEY}
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.flask_app.rule=Host(`quantumtimecapsule.com`)"
-      - "traefik.http.routers.flask_app.entrypoints=websecure"
-      - "traefik.http.routers.flask_app.tls.certresolver=myresolver"
+      - "traefik.http.routers.flask_app.rule=Host(`13.48.64.218`)"
+      - "traefik.http.routers.flask_app.entrypoints=web"  # Redirect from HTTP
+      - "traefik.http.routers.flask_app.middlewares=redirect-to-https"
+      - "traefik.http.routers.flask_app-secure.rule=Host(`13.48.64.218`)"
+      - "traefik.http.routers.flask_app-secure.entrypoints=websecure"  # Serve on HTTPS
+      - "traefik.http.routers.flask_app-secure.tls.certresolver=myresolver"
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-      - "traefik.http.routers.flask_app-secure.middlewares=redirect-to-https"
     ports:
       - "5000:5000"
-    #volumes:
-      #- "."  # Mount volume for live updates
+    networks:
+      - webnet
 
   traefik:
     image: traefik:v3.1.4
@@ -51,7 +55,7 @@ services:
       - "--entrypoints.websecure.address=:443"
       - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
       - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
-      - "--certificatesresolvers.myresolver.acme.email=contact@quantumtimecapsule.com"  # Valid email address
+      - "--certificatesresolvers.myresolver.acme.email=contact@quantumtimecapsule.com"  # Use a valid email address here
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
     ports:
       - "80:80"
@@ -59,6 +63,11 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./letsencrypt:/letsencrypt  # Store SSL certificates
+    networks:
+      - webnet
 
 volumes:
   db_data:
+
+networks:
+  webnet:
