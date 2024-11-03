@@ -32,10 +32,10 @@ services:
       SECRET_KEY: ${SECRET_KEY}
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.flask_app.rule=Host(`13.48.64.218`)"
+      - "traefik.http.routers.flask_app.rule=Host(`quantumtimecapsule.dominikkoller.com`)"
       - "traefik.http.routers.flask_app.entrypoints=web"  # Redirect from HTTP
       - "traefik.http.routers.flask_app.middlewares=redirect-to-https"
-      - "traefik.http.routers.flask_app-secure.rule=Host(`13.48.64.218`)"
+      - "traefik.http.routers.flask_app-secure.rule=Host(`quantumtimecapsule.dominikkoller.com`)"
       - "traefik.http.routers.flask_app-secure.entrypoints=websecure"  # Serve on HTTPS
       - "traefik.http.routers.flask_app-secure.tls.certresolver=myresolver"
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
