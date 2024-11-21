@@ -9,8 +9,11 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans&family=Red+Hat+Mono&display=swap" rel="stylesheet">
 
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- amCharts 5 -->
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/map.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/geodata/worldLow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Dark.js"></script>
 
     <!-- Inline CSS -->
     <style>
@@ -132,42 +135,17 @@
 
         .stat-value {
             font: 400 2rem 'Instrument Sans', sans-serif;
-            color: #6fa8dc;
+            color: #ff6f61; /* Changed to red */
         }
 
-        /* Chart Containers */
-        .charts-section {
-            display: flex;
-            flex-direction: column;
-            gap: 50px;
-            margin-bottom: 50px;
-        }
-
-        .chart-item {
-            text-align: center;
+        /* Map Container */
+        .map-container {
             width: 100%;
             max-width: 800px;
+            height: 500px;
             margin: 0 auto;
-        }
-
-        .chart-title {
-            font: 400 1.5rem 'Instrument Sans', sans-serif;
-            margin-bottom: 20px;
-            color: #fff;
-            text-transform: lowercase;
-        }
-
-        .chart-container {
+            margin-bottom: 50px;
             position: relative;
-            margin: 0 auto;
-            height: 400px;
-            width: 100%;
-            max-width: 600px;
-        }
-
-        .chart-container canvas {
-            display: block;
-            margin: 0 auto;
         }
 
         .button-container {
@@ -230,10 +208,6 @@
                 max-width: 100%;
             }
 
-            .charts-section {
-                gap: 30px;
-            }
-
             .page-title {
                 font-size: 2rem;
             }
@@ -276,22 +250,11 @@
             </div>
         </div>
 
-        <!-- Charts Section -->
+        <!-- Interactive World Map Section -->
         <div class="charts-section">
-            <!-- Top Subjects of Study Chart -->
             <div class="chart-item">
-                <h3 class="chart-title">top subjects of study</h3>
-                <div class="chart-container">
-                    <canvas id="subjectsChart"></canvas>
-                </div>
-            </div>
-
-            <!-- Top Countries Chart -->
-            <div class="chart-item">
-                <h3 class="chart-title">top countries</h3>
-                <div class="chart-container">
-                    <canvas id="countriesChart"></canvas>
-                </div>
+                <h3 class="chart-title">user distribution map</h3>
+                <div id="worldMap" class="map-container"></div>
             </div>
         </div>
 
@@ -305,96 +268,108 @@
         <p>&copy; 2024 Quantum Time Capsule. All rights reserved.</p>
     </footer>
 
-    <!-- Chart.js Data Population Script -->
+    <!-- amCharts Map Script -->
     <script>
-    // Colors array for consistency
-    const colors = [
-        '#6fa8dc', '#e06666', '#f6b26b', '#93c47d', '#76a5af'
-    ];
+    am5.ready(function() {
+        // Create root and chart
+        var root = am5.Root.new("worldMap");
 
-    // Top Subjects of Study Chart
-    const subjectsData = {
-        labels: [{% for subject in top_subjects_labels %}'{{ subject }}'{% if not loop.last %}, {% endif %}{% endfor %}],
-        datasets: [{
-            data: [{% for count in top_subjects_counts %}{{ count }}{% if not loop.last %}, {% endif %}{% endfor %}],
-            backgroundColor: colors,
-            hoverOffset: 4
-        }]
-    };
+        // Set themes
+        root.setThemes([
+            am5themes_Dark.new(root)
+        ]);
 
-    const subjectsConfig = {
-        type: 'pie',
-        data: subjectsData,
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        color: '#d4d4d4'
-                    }
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const label = context.label || '';
-                            const value = context.parsed;
-                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                            const percentage = ((value / total) * 100).toFixed(1);
-                            return `${label}: ${value} users (${percentage}%)`;
-                        }
-                    }
-                }
-            }
-        }
-    };
+        // Create the map chart
+        var chart = root.container.children.push(
+            am5map.MapChart.new(root, {
+                panX: "rotateX",
+                projection: am5map.geoMercator()
+            })
+        );
 
-    // Top Countries Chart
-    const countriesData = {
-        labels: [{% for country in top_countries_labels %}'{{ country }}'{% if not loop.last %}, {% endif %}{% endfor %}],
-        datasets: [{
-            data: [{% for count in top_countries_counts %}{{ count }}{% if not loop.last %}, {% endif %}{% endfor %}],
-            backgroundColor: colors,
-            hoverOffset: 4
-        }]
-    };
+        // Create main polygon series for countries
+        var polygonSeries = chart.series.push(
+            am5map.MapPolygonSeries.new(root, {
+                geoJSON: am5geodata_worldLow,
+                valueField: "value",
+                calculateAggregates: true,
+                tooltip: am5.Tooltip.new(root, {})
+            })
+        );
 
-    const countriesConfig = {
-        type: 'doughnut',
-        data: countriesData,
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        color: '#d4d4d4'
-                    }
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const label = context.label || '';
-                            const value = context.parsed;
-                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                            const percentage = ((value / total) * 100).toFixed(1);
-                            return `${label}: ${value} users (${percentage}%)`;
-                        }
-                    }
-                }
-            }
-        }
-    };
+        polygonSeries.mapPolygons.template.setAll({
+            tooltipText: "{name}\nUsers: {value}\nMessages: {messages}",
+            interactive: true
+        });
 
-    // Render charts
-    window.onload = function() {
-        var subjectsCtx = document.getElementById('subjectsChart').getContext('2d');
-        var countriesCtx = document.getElementById('countriesChart').getContext('2d');
-        new Chart(subjectsCtx, subjectsConfig);
-        new Chart(countriesCtx, countriesConfig);
-    };
+        // Hover state without scaling
+        polygonSeries.mapPolygons.template.states.create("hover", {
+            fill: am5.color("#ffb3b3") // Light red on hover
+        });
+
+        // Set up heat rules with red colors
+        polygonSeries.set("heatRules", [{
+            target: polygonSeries.mapPolygons.template,
+            dataField: "value",
+            min: am5.color("#ffffff"),
+            max: am5.color("#ff6f61"), // Red color
+            key: "fill"
+        }]);
+
+        // Prepare demographic data for the map
+        const mapData = [
+            {% for country, data in country_data.items() %}
+            {% if country in country_codes %}
+            {
+                id: "{{ country_codes[country] }}",
+                name: "{{ country }}",
+                value: {{ data['users'] }},
+                messages: {{ data['messages'] }}
+            },
+            {% endif %}
+            {% endfor %}
+        ];
+
+        // Set data
+        polygonSeries.data.setAll(mapData);
+
+        // Add heat legend
+        var heatLegend = chart.children.push(
+            am5.HeatLegend.new(root, {
+                orientation: "vertical",
+                startColor: am5.color("#ffffff"),
+                endColor: am5.color("#ff6f61"),
+                startText: "Few",
+                endText: "Many",
+                stepCount: 5,
+                paddingLeft: 20,
+                paddingRight: 20,
+                y: am5.percent(50),
+                centerY: am5.percent(50)
+            })
+        );
+
+        // Add legend labels
+        heatLegend.startLabel.setAll({
+            fontSize: 12,
+            fill: heatLegend.get("startColor")
+        });
+
+        heatLegend.endLabel.setAll({
+            fontSize: 12,
+            fill: heatLegend.get("endColor")
+        });
+
+        // Adjust legend markers
+        polygonSeries.events.on("datavalidated", function() {
+            heatLegend.set("startValue", polygonSeries.getPrivate("valueLow"));
+            heatLegend.set("endValue", polygonSeries.getPrivate("valueHigh"));
+        });
+
+        // Make stuff animate on load
+        polygonSeries.appear(1000, 100);
+        chart.appear(1000, 100);
+    });
     </script>
 </body>
 </html>

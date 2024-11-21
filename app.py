@@ -10,6 +10,7 @@ import time
 import uuid
 import logging
 from email_validator import validate_email, EmailNotValidError
+from collections import Counter
 
 # Initialize the Flask app
 app = Flask(__name__)
@@ -180,92 +181,67 @@ def index():
     else:
         return render_template('index.html', max_characters=max_characters)
 
-# Route to display the encrypted message
-@app.route('/message/<message_id>')
-def message(message_id):
-    try:
-        message_data = Message.query.filter_by(message_id=message_id).first()
-    except Exception as e:
-        logging.error(f"Database error: {str(e)}")
-        return render_template('error.html', error_message="A database error occurred. Please try again later.")
-
-    if not message_data:
-        return redirect(url_for('index'))
-
-    return render_template('result.html', message_data=message_data)
-
-# Route for demographic data
 @app.route('/demographics')
 def demographics():
-    total_users = Message.query.filter(
-        (Message.age != None) |
-        (Message.subject != None) |
-        (Message.country != None)
-    ).count()
+    import pycountry
+    from collections import Counter
 
-    total_messages = Message.query.count()
+    try:
+        # Total users with valid demographic data
+        total_users = Message.query.filter(
+            (Message.age != None) |
+            (Message.subject != None) |
+            (Message.country != None)
+        ).count()
 
-    average_age = db.session.query(func.avg(Message.age)).scalar()
-    average_age = round(average_age, 1) if average_age else None
+        # Total messages sent
+        total_messages = Message.query.count()
 
-    ages = [age for (age,) in db.session.query(Message.age).filter(Message.age != None).order_by(Message.age).all()]
-    if ages:
-        median_age = ages[len(ages) // 2]
-        youngest_age = min(ages)
-        oldest_age = max(ages)
-    else:
-        median_age = None
-        youngest_age = None
-        oldest_age = None
+        # Median, youngest, and oldest ages
+        ages = [age for (age,) in db.session.query(Message.age).filter(Message.age != None).order_by(Message.age).all()]
+        median_age = ages[len(ages) // 2] if ages else None
+        youngest_age = min(ages) if ages else None
+        oldest_age = max(ages) if ages else None
 
-    subjects_data = db.session.query(Message.subject, func.count(Message.subject)) \
-        .filter(Message.subject != None) \
-        .group_by(Message.subject) \
-        .order_by(func.count(Message.subject).desc()) \
-        .limit(3) \
-        .all()
+        # Count messages per country
+        country_counts = Counter([msg.country for msg in Message.query.filter(Message.country != None).all()])
 
-    total_subjects_count = db.session.query(func.count(Message.subject)).filter(Message.subject != None).scalar()
-    top_subjects_count = sum(count for subject, count in subjects_data)
-    other_subjects_count = total_subjects_count - top_subjects_count
+        # Dynamically generate ISO 3166-1 alpha-2 codes for countries
+        country_codes = {country.name: country.alpha_2 for country in pycountry.countries}
 
-    top_subjects_labels = [subject if subject else 'Unknown' for subject, count in subjects_data]
-    top_subjects_counts = [count for subject, count in subjects_data]
+        # Generate country_data for the template
+        country_data = {
+            country: {
+                "code": country_codes.get(country, "Unknown"),
+                "users": count,
+                "messages": count  # Adjust if you have separate logic for messages
+            }
+            for country, count in country_counts.items() if country in country_codes
+        }
 
-    if other_subjects_count > 0:
-        top_subjects_labels.append('Other')
-        top_subjects_counts.append(other_subjects_count)
+        # Debugging: Print country_data
+        print("DEBUG: country_data:", country_data)
 
-    countries_data = db.session.query(Message.country, func.count(Message.country)) \
-        .filter(Message.country != None) \
-        .group_by(Message.country) \
-        .order_by(func.count(Message.country).desc()) \
-        .limit(3) \
-        .all()
+        # Prepare demographics data for the template
+        demographics_data = {
+            'total_users': total_users,
+            'total_messages': total_messages,
+            'median_age': median_age,
+            'youngest_age': youngest_age,
+            'oldest_age': oldest_age,
+            'country_data': country_data,  # Pass the country_data here
+            'country_codes': country_codes
+        }
 
-    total_countries_count = db.session.query(func.count(Message.country)).filter(Message.country != None).scalar()
-    top_countries_count = sum(count for country, count in countries_data)
-    other_countries_count = total_countries_count - top_countries_count
+        # Debugging: Print demographics_data
+        print("DEBUG: demographics_data:", demographics_data)
 
-    top_countries_labels = [country if country else 'Unknown' for country, count in countries_data]
-    top_countries_counts = [count for country, count in countries_data]
+        return render_template('demographics.html', **demographics_data)
 
-    if other_countries_count > 0:
-        top_countries_labels.append('Other')
-        top_countries_counts.append(other_countries_count)
-
-    return render_template(
-        'demographics.html',
-        total_users=total_users,
-        total_messages=total_messages,
-        median_age=median_age,
-        youngest_age=youngest_age,
-        oldest_age=oldest_age,
-        top_subjects_labels=top_subjects_labels,
-        top_subjects_counts=top_subjects_counts,
-        top_countries_labels=top_countries_labels,
-        top_countries_counts=top_countries_counts
-    )
+    except Exception as e:
+        # Log and display error
+        print("ERROR: Exception in /demographics route:", e)
+        return render_template('error.html', error_message=str(e)), 500
 
 # Route to handle demographic form submission via AJAX
 @app.route('/submit_demographics', methods=['POST'])
@@ -302,10 +278,36 @@ def submit_demographics():
 
     return jsonify({'success': 'Demographics submitted successfully!'})
 
+
 # Route for about page
 @app.route('/about')
 def about():
     return render_template('about.html')
+
+# Route to display the encrypted message
+import pycountry
+
+@app.route('/message/<message_id>')
+def message(message_id):
+    try:
+        message_data = Message.query.filter_by(message_id=message_id).first()
+    except Exception as e:
+        logging.error(f"Database error: {str(e)}")
+        return render_template('error.html', error_message="A database error occurred. Please try again later.")
+
+    if not message_data:
+        return redirect(url_for('index'))
+
+    # Get list of country names
+    countries = [country.name for country in pycountry.countries]
+
+    # Example list of occupations (you can extend this list)
+    occupations = [
+        "Student", "Engineer", "Teacher", "Doctor", "Scientist", "Artist",
+        "Lawyer", "Entrepreneur", "Developer", "Designer", "Other"
+    ]
+
+    return render_template('result.html', message_data=message_data, countries=countries, occupations=occupations)
 
 # Create the database tables and run the app
 if __name__ == '__main__':

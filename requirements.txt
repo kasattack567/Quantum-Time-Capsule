@@ -5,3 +5,4 @@ SQLAlchemy==1.4.39
 cryptography==41.0.2
 email-validator==2.2.0
 mysql-connector-python==9.0.0
+pycountry==22.3.5

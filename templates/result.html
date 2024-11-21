@@ -5,12 +5,14 @@
     <meta charset="UTF-8">
     <title>Your Encrypted Message - Quantum Time Capsule</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- Include Select2 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans&family=Red+Hat+Mono&display=swap" rel="stylesheet">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
     <!-- Inline CSS -->
     <style>
@@ -19,6 +21,43 @@
             min-height: 100%;
             margin: 0;
             padding: 0;
+        }
+        
+        /* Adjust Select2 styling to match your input fields */
+        .select2-container .select2-selection--single {
+            height: calc(1.5em + .75rem + 2px); /* Match Bootstrap's input height */
+            background-color: #2e2e2e;
+            border: 1px solid #444;
+            border-radius: .25rem;
+            padding: .375rem .75rem;
+            color: #d4d4d4;
+        }
+
+        .select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered {
+            line-height: 1.5;
+        }
+
+        .select2-container--bootstrap4 .select2-selection--single .select2-selection__arrow {
+            height: 100%;
+        }
+
+        .select2-dropdown {
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+        }
+
+        .select2-results__option {
+            padding: .5rem .75rem;
+        }
+
+        .select2-search--dropdown .select2-search__field {
+            background-color: #2e2e2e;
+            border: 1px solid #444;
+            color: #d4d4d4;
+        }
+
+        .select2-search--dropdown .select2-search__field::placeholder {
+            color: #6c757d;
         }
 
         body {
@@ -216,6 +255,25 @@
                 margin-top: 10px;
             }
         }
+        /* Step 7: Ensure Select2 dropdown has scrollbars when needed */
+        .select2-container .select2-dropdown {
+            max-height: 200px; /* Adjust as needed */
+            overflow-y: auto;
+        }
+
+        /* Optional: Adjust the styling of the scrollbar */
+        .select2-container .select2-results__options::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .select2-container .select2-results__options::-webkit-scrollbar-track {
+            background: #1e1e1e;
+        }
+
+        .select2-container .select2-results__options::-webkit-scrollbar-thumb {
+            background-color: #444;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
@@ -300,13 +358,19 @@ Return to Quantum Time Capsule to get instructions on how to decrypt your messag
                             <label for="email">email (optional)</label>
                             <input type="email" class="form-control" id="email" placeholder="enter your email">
                         </div>
+                        <!-- Country Field -->
                         <div class="form-group">
                             <label for="country">country (optional)</label>
-                            <input type="text" class="form-control" id="country" placeholder="enter your country">
+                            <select class="form-control" id="country" name="country" style="width: 100%;">
+                                <option value="" disabled selected hidden>Select or type your country</option>
+                            </select>                            
                         </div>
+                        <!-- Occupation Field -->
                         <div class="form-group">
                             <label for="occupation">occupation/field of study (optional)</label>
-                            <input type="text" class="form-control" id="occupation" placeholder="enter your occupation or field of study">
+                            <select class="form-control" id="occupation" name="occupation" style="width: 100%;">
+                                <option value="" disabled selected hidden>Select or type your occupation</option>
+                            </select>                            
                         </div>
                         <div class="form-group">
                             <label for="age">age (optional)</label>
@@ -323,14 +387,46 @@ Return to Quantum Time Capsule to get instructions on how to decrypt your messag
     </div>
 
     <!-- jQuery and Bootstrap JS (load these first) -->
-    <!-- jQuery -->
+    <!-- jQuery (must be loaded before Select2 JS) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Include Select2 JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
     <!-- Popper.js for Bootstrap 4 -->
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+
     <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <!-- Your custom script (place this after the above scripts) -->
+    <script>
+        // Convert countries and occupations to JavaScript arrays
+        var countries = {{ countries | tojson }};
+        var occupations = {{ occupations | tojson }};
+        
+        $(document).ready(function() {
+            // Initialize Select2 for the country field
+            $('#country').select2({
+                placeholder: "Select or type your country",
+                data: countries.map(function(country) { return { id: country, text: country }; }),
+                tags: true, // Enables typing custom values
+                allowClear: true, // Allow clearing the selection
+                width: 'resolve', // Adjusts width to the element
+                theme: 'bootstrap4' // Match Bootstrap 4 styling
+            });
+
+            // Initialize Select2 for the occupation field
+            $('#occupation').select2({
+                placeholder: "Select or type your occupation",
+                data: occupations.map(function(occupation) { return { id: occupation, text: occupation }; }),
+                tags: true,
+                allowClear: true,
+                width: 'resolve',
+                theme: 'bootstrap4'
+            });
+        });
+    </script> 
     <script>
         // Copy to Clipboard Script
         function copyToClipboard(id) {
@@ -351,8 +447,8 @@ Return to Quantum Time Capsule to get instructions on how to decrypt your messag
             const message_id = document.getElementById('message_id').value;
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
-            const country = document.getElementById('country').value;
-            const occupation = document.getElementById('occupation').value;
+            const country = $('#country').val(); // Use jQuery to get Select2 value
+            const occupation = $('#occupation').val(); // Use jQuery for Select2
             const age = document.getElementById('age').value;
 
             console.log('Submitting demographics:', { message_id, name, email, country, occupation, age });
@@ -379,6 +475,6 @@ Return to Quantum Time Capsule to get instructions on how to decrypt your messag
                 }
             });
         }
-    </script>
+    </script>    
 </body>
 </html>
