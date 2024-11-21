@@ -12,3 +12,7 @@ The Quantum Time Capsule offers users a way to send messages encrypted with RSA,
 - **Future Retrieval:** Messages remain inaccessible until future quantum computing power can theoretically break the encryption.
 - **Interactive Interface:** A user-friendly design with futuristic elements to enhance the experience.
 - **Educational Content:** Information about RSA encryption and how future quantum computing could impact cryptography.
+
+## Technologies
+
+Quantum Time Capsule is built with Flask
