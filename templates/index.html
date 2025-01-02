@@ -244,15 +244,14 @@
         <div class="message-container">
             <!-- Message Description -->
             <p class="message-description">
-                this message will only be read when quantum computers can break RSA encryption.
-                <!-- Updated the "find out more" text to be a link -->
+                write a message to send to a friend. it will be encrypted so it can only be read when a powerful quantum computer is built. 
                 <a href="{{ url_for('explore_more') }}" class="highlight">find out more</a>
             </p>
 
             <!-- Message Form -->
             <form id="message-form" method="POST">
                 <label for="secretMessage" class="visually-hidden">Write your secret message</label>
-                <textarea id="secretMessage" name="message" class="message-input" placeholder="Write your message here..." aria-label="Write your secret message" required>{{ message|default('') }}</textarea>
+                <textarea id="secretMessage" name="message" class="message-input" placeholder="write your message here..." aria-label="Write your secret message" required>{{ message|default('') }}</textarea>
                 <div class="button-container">
                     <button type="submit" class="encrypt-button">encrypt</button>
                 </div>

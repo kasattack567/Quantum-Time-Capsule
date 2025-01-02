@@ -139,6 +139,14 @@
             text-align: left;
         }
 
+        .acknowledgments {
+            font: 400 1.125rem 'Instrument Sans', sans-serif;
+            display: flex;
+            justify-content: center; /* Centers horizontally */
+            align-items: center;     /* Centers vertically */
+            /*height: 200px;           /* Set a height to center within */ 
+        }
+
         .social-icon {
             color: #6fa8dc;
             font-size: 2rem;
@@ -250,6 +258,10 @@
                 </a>
             </div>
         </div>
+        <div class="acknowledgments">
+            <p class="acknowledgments-paragraph">Special thanks to Dominik Koller, Joy Wang and Julius Vidal.</p>
+        </div>
+
         <div class="button-container">
             <a href="{{ url_for('index') }}" class="back-button">back to home</a>
         </div>
