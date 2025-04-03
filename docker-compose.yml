@@ -1,0 +1,71 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - webnet
+
+  web:
+    build:
+      context: .  # Path to Dockerfile
+      dockerfile: Dockerfile
+    container_name: flask_app
+    depends_on:
+      - db
+    environment:
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ${DB_NAME}
+      SECRET_KEY: ${SECRET_KEY}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.flask_app.rule=Host(`quantumtimecapsule.com`)"
+      - "traefik.http.routers.flask_app.entrypoints=web"  # Redirect from HTTP
+      - "traefik.http.routers.flask_app.middlewares=redirect-to-https"
+      - "traefik.http.routers.flask_app-secure.rule=Host(`quantumtimecapsule.com`)"
+      - "traefik.http.routers.flask_app-secure.entrypoints=websecure"  # Serve on HTTPS
+      - "traefik.http.routers.flask_app-secure.tls.certresolver=myresolver"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+    ports:
+      - "5000:5000"
+    networks:
+      - webnet
+
+  traefik:
+    image: traefik:v3.1.4
+    container_name: traefik_proxy
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.myresolver.acme.email=contact@quantumtimecapsule.com"  # Use a valid email address here
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./letsencrypt:/letsencrypt  # Store SSL certificates
+    networks:
+      - webnet
+
+volumes:
+  db_data:
+
+networks:
+  webnet:

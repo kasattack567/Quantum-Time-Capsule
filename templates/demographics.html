@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta and Title -->
+    <meta charset="UTF-8">
+    <title>Demographics - Quantum Time Capsule</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans&family=Red+Hat+Mono&display=swap" rel="stylesheet">
+
+    <!-- amCharts 5 -->
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/map.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/geodata/worldLow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Dark.js"></script>
+
+    <!-- Inline CSS -->
+    <style>
+        /* Apply box-sizing globally */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        /* Reset margins and paddings */
+        html, body {
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+        }
+
+        body {
+            background: conic-gradient(
+                from 59deg,
+                #10182E 0%,
+                #19244A 10%,
+                #252867 20%,
+                #1A3A66 40%,
+                #1B3C4F 60%,
+                #0A1C51 80%,
+                #151D32 100%
+            );
+            background-position: -800px center;
+            background-size: calc(100% + 800px) 100%;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #fff;
+            font-family: 'Roboto', sans-serif;
+            padding-top: 100px; /* Adjust for fixed header */
+        }
+
+        /* Header Bar Styling */
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            font-family: 'Red Hat Mono', monospace;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: transparent;
+            z-index: 1000;
+        }
+
+        .brand-title {
+            font-family: 'Instrument Sans', sans-serif;
+            font-size: 1.875rem;
+            font-weight: 500;
+            text-transform: lowercase;
+            color: #fff;
+            margin: 0;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            font-size: 1rem;
+        }
+
+        .nav-item {
+            color: #d4d4d4;
+            text-decoration: none;
+            text-transform: lowercase;
+            transition: color 0.3s;
+        }
+
+        .nav-item:hover {
+            color: #fff;
+        }
+
+        /* Content Wrapper */
+        .content-wrapper {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        .page-title {
+            font: 400 2.5rem 'Instrument Sans', sans-serif;
+            text-align: center;
+            margin-bottom: 50px;
+            text-transform: lowercase;
+        }
+
+        /* Statistics Section */
+        .stats-section {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .stat-item {
+            flex: 1 1 200px;
+            max-width: 200px;
+            text-align: center;
+            color: #d4d4d4;
+            border: 1px solid #444;
+            border-radius: 10px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-title {
+            font: 400 1.25rem 'Instrument Sans', sans-serif;
+            margin-bottom: 10px;
+            color: #fff;
+            text-transform: lowercase;
+        }
+
+        .stat-value {
+            font: 400 2rem 'Instrument Sans', sans-serif;
+            color: #ff6f61; /* Changed to red */
+        }
+
+        /* Map Container */
+        .map-container {
+            width: 100%;
+            max-width: 800px;
+            height: 500px;
+            margin: 0 auto;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .back-button {
+            background-color: #1a2a9f;
+            color: #fff;
+            padding: 14px 37px;
+            font: 400 1.25rem 'Red Hat Mono', monospace;
+            border: none;
+            border-radius: 19px;
+            text-decoration: none;
+            display: inline-block;
+            text-transform: lowercase;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background-color: #14207d;
+        }
+
+        /* Footer Section */
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            background-color: transparent;
+            color: #d4d4d4;
+            font-family: 'Instrument Sans', sans-serif;
+            margin-top: 50px;
+        }
+
+        /* Media Queries */
+        @media (max-width: 991px) {
+            .header-container {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 10px 20px;
+            }
+
+            .nav-menu {
+                flex-wrap: wrap;
+                gap: 20px;
+                margin-top: 10px;
+            }
+
+            .content-wrapper {
+                padding: 0 20px;
+            }
+
+            .stats-section {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .stat-item {
+                flex: 1 1 100%;
+                max-width: 100%;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <header class="header-container">
+        <h1 class="brand-title">quantum time capsule</h1>
+        <nav class="nav-menu">
+            <a href="{{ url_for('index') }}" class="nav-item">new capsule</a>
+            <a href="{{ url_for('explore_more') }}" class="nav-item">how it works</a>
+            <a href="{{ url_for('demographics') }}" class="nav-item">who's using</a>
+            <a href="{{ url_for('about') }}" class="nav-item">about us</a>
+        </nav>
+    </header>
+
+    <!-- Demographics Content -->
+    <section class="content-wrapper">
+        <h1 class="page-title">user demographics</h1>
+
+        <!-- Statistics Section -->
+        <div class="stats-section">
+            <div class="stat-item">
+                <h3 class="stat-title">total users</h3>
+                <p class="stat-value">{{ total_users }}</p>
+            </div>
+            <div class="stat-item">
+                <h3 class="stat-title">total messages sent</h3>
+                <p class="stat-value">{{ total_messages }}</p>
+            </div>
+            <div class="stat-item">
+                <h3 class="stat-title">median age</h3>
+                <p class="stat-value">{{ median_age if median_age else 'N/A' }}</p>
+            </div>
+            <div class="stat-item">
+                <h3 class="stat-title">age range</h3>
+                <p class="stat-value">{{ youngest_age }} - {{ oldest_age }}</p>
+            </div>
+        </div>
+
+        <!-- Interactive World Map Section -->
+        <div class="charts-section">
+            <div class="chart-item">
+                <h3 class="chart-title">user distribution map</h3>
+                <div id="worldMap" class="map-container"></div>
+            </div>
+        </div>
+
+        <div class="button-container">
+            <a href="{{ url_for('index') }}" class="back-button">back to home</a>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2024 Quantum Time Capsule. All rights reserved.</p>
+    </footer>
+
+    <!-- amCharts Map Script -->
+    <script>
+    am5.ready(function() {
+        // Create root and chart
+        var root = am5.Root.new("worldMap");
+
+        // Set themes
+        root.setThemes([
+            am5themes_Dark.new(root)
+        ]);
+
+        // Create the map chart
+        var chart = root.container.children.push(
+            am5map.MapChart.new(root, {
+                panX: "rotateX",
+                projection: am5map.geoMercator()
+            })
+        );
+
+        // Create main polygon series for countries
+        var polygonSeries = chart.series.push(
+            am5map.MapPolygonSeries.new(root, {
+                geoJSON: am5geodata_worldLow,
+                valueField: "value",
+                calculateAggregates: true,
+                tooltip: am5.Tooltip.new(root, {})
+            })
+        );
+
+        polygonSeries.mapPolygons.template.setAll({
+            tooltipText: "{name}\nUsers: {value}\nMessages: {messages}",
+            interactive: true
+        });
+
+        // Hover state without scaling
+        polygonSeries.mapPolygons.template.states.create("hover", {
+            fill: am5.color("#ffb3b3") // Light red on hover
+        });
+
+        // Set up heat rules with red colors
+        polygonSeries.set("heatRules", [{
+            target: polygonSeries.mapPolygons.template,
+            dataField: "value",
+            min: am5.color("#ffffff"),
+            max: am5.color("#ff6f61"), // Red color
+            key: "fill"
+        }]);
+
+        // Prepare demographic data for the map
+        const mapData = [
+            {% for country, data in country_data.items() %}
+            {% if country in country_codes %}
+            {
+                id: "{{ country_codes[country] }}",
+                name: "{{ country }}",
+                value: {{ data['users'] }},
+                messages: {{ data['messages'] }}
+            },
+            {% endif %}
+            {% endfor %}
+        ];
+
+        // Set data
+        polygonSeries.data.setAll(mapData);
+
+        // Add heat legend
+        var heatLegend = chart.children.push(
+            am5.HeatLegend.new(root, {
+                orientation: "vertical",
+                startColor: am5.color("#ffffff"),
+                endColor: am5.color("#ff6f61"),
+                startText: "Few",
+                endText: "Many",
+                stepCount: 5,
+                paddingLeft: 20,
+                paddingRight: 20,
+                y: am5.percent(50),
+                centerY: am5.percent(50)
+            })
+        );
+
+        // Add legend labels
+        heatLegend.startLabel.setAll({
+            fontSize: 12,
+            fill: heatLegend.get("startColor")
+        });
+
+        heatLegend.endLabel.setAll({
+            fontSize: 12,
+            fill: heatLegend.get("endColor")
+        });
+
+        // Adjust legend markers
+        polygonSeries.events.on("datavalidated", function() {
+            heatLegend.set("startValue", polygonSeries.getPrivate("valueLow"));
+            heatLegend.set("endValue", polygonSeries.getPrivate("valueHigh"));
+        });
+
+        // Make stuff animate on load
+        polygonSeries.appear(1000, 100);
+        chart.appear(1000, 100);
+    });
+    </script>
+</body>
+</html>
