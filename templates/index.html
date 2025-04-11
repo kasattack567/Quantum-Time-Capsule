@@ -251,13 +251,13 @@
             <!-- Message Form -->
             <form id="message-form" method="POST">
                 <label for="secretMessage" class="visually-hidden">Write your secret message</label>
-                <textarea id="secretMessage" name="message" class="message-input" placeholder="write your message here..." aria-label="Write your secret message" required>{{ message|default('') }}</textarea>
+                <textarea id="secretMessage" name="message" class="message-input" placeholder="write a message worth waiting 20 years for..." aria-label="Write your secret message" required>{{ message|default('') }}</textarea>
                 <div class="button-container">
                     <button type="submit" class="encrypt-button">encrypt</button>
                 </div>
             </form>
         </div>
-    </section>
+
 
     <!-- Matrix Loading Screen -->
     <div id="loading-screen" class="loading-screen">

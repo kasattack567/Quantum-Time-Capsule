@@ -1,22 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Meta and Title -->
     <meta charset="UTF-8">
     <title>How It Works - Quantum Time Capsule</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans&family=Red+Hat+Mono&display=swap" rel="stylesheet">
 
-    <!-- Inline CSS -->
     <style>
-        /* Apply box-sizing globally to include padding and border in width and height calculations */
         *, *::before, *::after {
             box-sizing: border-box;
         }
 
-        /* Reset margins and paddings */
         html, body {
             margin: 0;
             padding: 0;
@@ -40,10 +34,9 @@
             background-attachment: fixed;
             color: #fff;
             font-family: 'Roboto', sans-serif;
-            padding-top: 100px; /* Adjust for fixed header */
+            padding-top: 100px;
         }
 
-        /* Header Bar Styling */
         .header-container {
             display: flex;
             justify-content: space-between;
@@ -53,7 +46,7 @@
             position: fixed;
             top: 0;
             left: 0;
-            right: 0; /* Ensure the header spans the full width */
+            right: 0;
             background-color: transparent;
             z-index: 1000;
         }
@@ -139,9 +132,9 @@
             text-align: left;
         }
 
-        .code-example, .code-block {
+        .code-block {
             color: #d4d4d4;
-            margin-top: 20px;
+            margin: 10px 0 20px 0;
             font: 400 1.125rem/1.6 'Red Hat Mono', monospace;
             background-color: #1c1c1c;
             padding: 10px;
@@ -158,12 +151,42 @@
         a:hover {
             text-decoration: underline;
         }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted #6fa8dc;
+            cursor: help;
+        }
+
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.85);
+            color: #fff;
+            padding: 10px;
+            border-radius: 6px;
+            white-space: pre-wrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            width: 280px;
+            text-align: center;
+            font-size: 0.9rem;
+            z-index: 999;
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
 
 <section class="quantum-section">
-    <!-- Navigation Bar -->
     <header class="header-container">
         <h1 class="brand-title">quantum time capsule</h1>
         <nav class="nav-menu">
@@ -175,73 +198,88 @@
     </header>
 
     <div class="content-wrapper">
-        <!-- First Section -->
         <h2 class="section-title">how it works</h2>
+
         <p class="section-description">
-            The goal of this website is to get people involved and excited about progress in quantum computing.
-            If a large quantum computer is built tomorrow – what would you do with it?
-            This website gives you at least one possibility – you can use this website to create messages that can only be decrypted using a quantum computer!
+            The goal of this website is to help people engage with progress in quantum computing by showing what it means for digital security.
+        </p>
+        <p class="section-description">
+            If a large <span class="tooltip" data-tooltip="Quantum computers are a new kind of computer that use quantum physics to solve certain problems much faster than classical ones.">quantum computer</span> were built – what would you do with it?
+        </p>
+        <p class="section-description">
+            This site offers one possibility: you can use it to uncover time capsules — deeply personal messages sealed away long ago, now unlocked by the power of a quantum mechanics.
         </p>
 
-        <!-- Second Section -->
-        <h2 class="section-title">what are quantum computers?</h2>
-        <p class="section-description">
-            Quantum computers are a new kind of computer that is very fast, but only for solving some kinds of problems.
-            Unlike today’s computers, which process information in binary (0s and 1s), quantum computers use a paradigm inspired by quantum physics, which allows them to solve some problems much faster.
-            Scientists and engineers are working to build large and reliable quantum computers, though we currently have only small and error-prone prototypes.
-            Computer scientists are also exploring ways to apply quantum computers to a wider range of problems.
-        </p>
 
-        <!-- Third Section -->
-        <h2 class="section-title">what is cryptography?</h2>
-        <p class="section-description">
-            Cryptography ensures secure communication over the internet. When we encrypt a message, it becomes garbled to anyone without the secret key:
-        </p>
-        <p class="code-block">Hello -&gt; (*M#^ND#_&amp;N#(hu49#j</p>
-        <p class="section-description">
-            It requires immense computational power to decrypt the message without the proper key. Only the intended receiver, who possesses the secret key, can easily decrypt the message.
-        </p>
+        <h2 class="section-title">what happens to your message?</h2>
 
-        <!-- Fourth Section -->
-        <h2 class="section-title">quantum computers can break cryptographic algorithms?</h2>
         <p class="section-description">
-            Yes, quantum computers can break certain encryption algorithms, including RSA, which is widely used today.
+            When you submit a message, it is encrypted using <span class="tooltip" data-tooltip="RSA is a public-key encryption algorithm that uses a pair of keys: a public key for encryption and a private key for decryption.">RSA</span> — a form of <span class="tooltip" data-tooltip="Cryptography ensures secure communication by converting readable data into an unreadable format that can only be reversed with a key.">cryptography</span> based on the difficulty of factoring large numbers.
         </p>
         <p class="section-description">
-            The security of RSA relies on the difficulty of factorizing large numbers, whereas multiplying numbers is straightforward. For example, if I tell you I multiplied two numbers to get 62710561, determining which two numbers I used is difficult. However, if I tell you to multiply 7919 and 7919, you can easily compute the result.
-            Quantum computers can factorize large numbers efficiently, undermining the security of RSA.
+            Encryption transforms your message into a scrambled form that cannot be read without a <span class="tooltip" data-tooltip="A private key is a secret cryptographic key used to decrypt data that was encrypted with the corresponding public key.">private key</span>. For example:
         </p>
+        <div class="code-block">Hello → (*M#^ND#_&N#(hu49#j</div>
+        <p class="section-description">
+            After encryption, the private key is immediately deleted. This means no one — not even the server — can decrypt the message today. The encrypted message is stored in the database as a digital time capsule.
+        </p>
+        <p class="section-description">
+            The message will remain unreadable unless a future quantum computer is powerful enough to break RSA encryption by factoring the underlying key.
+        </p>
+    
 
-        <!-- Fifth Section -->
-        <h2 class="section-title">does that mean quantum computers will allow us to read all messages?</h2>
-        <p class="section-description">
-            Not necessarily. We are transitioning from RSA to quantum-resistant cryptographic systems. Quantum computers can only solve specific problems quickly. Once we adopt these new cryptographic methods, messages will remain secure even when large quantum computers are built.
-        </p>
-        <p class="section-description">
-            This website deliberately uses RSA to encrypt messages so that they are secure today but can be broken once powerful quantum computers become available.
-        </p>
+        <h2 class="section-title">how quantum computers affect rsa</h2>
 
-        <!-- Sixth Section -->
-        <h2 class="section-title">when will the messages be readable?</h2>
         <p class="section-description">
-            Once a large quantum computer with about 15,000 qubits (with negligible noise) is built, it will become possible to decrypt these messages (see <a href="https://arxiv.org/abs/1905.09749">arXiv paper</a>). However, advancements may reduce the required number of qubits.
+            RSA encryption is considered secure today because factoring large numbers is extremely difficult for classical computers. But quantum computers will change that. A future machine running <span class="tooltip" data-tooltip="Shor’s algorithm is a quantum algorithm that efficiently factors large numbers, making RSA insecure once quantum computers are powerful enough.">Shor’s algorithm</span> could efficiently break RSA by factoring its encryption key.
         </p>
         <p class="section-description">
-            This could happen in the next 15 to 30 years (see <a href="https://globalriskinstitute.org/publication/quantum-threat-timeline/">Quantum Threat Timeline</a>). When this occurs, you will likely hear about it in the news. If you provide us with your email address, we'll notify you, or you can check back on this website.
+            It’s estimated that a machine with around 15,000 <span class="tooltip" data-tooltip="A qubit is the basic unit of quantum information, able to exist in multiple states simultaneously.">qubits</span> would be needed to break RSA-2048, though this number could decrease with algorithmic or hardware improvements.
         </p>
-
-        <!-- Seventh Section -->
-        <h2 class="section-title">how can i decrypt the message?</h2>
+        
+        <h2 class="section-title">what is post-quantum cryptography?</h2>
         <p class="section-description">
-            Currently, you cannot decrypt the message. We don't expect decryption to be feasible for at least the next 15 years. Once large quantum computers are operational, we'll provide tools on this website to help you decrypt your message, or you can use the RSA cryptosystem yourself.
+            Post-quantum cryptography refers to cryptographic algorithms designed to be secure against the potential threats posed by quantum computers. As quantum technology advances, traditional encryption methods like RSA and ECC could become vulnerable. To address this, new algorithms are being developed to resist quantum attacks.
         </p>
-
-        <!-- Eighth Section -->
-        <h2 class="section-title">that's so far in the future!</h2>
         <p class="section-description">
-            Yes, it is! But now you have one more reason to look forward to the advancements in quantum computing.
+            Examples of these quantum-resistant algorithms include:
         </p>
+        <ul class="section-description">
+            <li>
+                <strong>CRYSTALS-Kyber:</strong> A lattice-based key encapsulation mechanism for secure key exchange. 
+            </li>
+            <li>
+                <strong>CRYSTALS-Dilithium:</strong> A lattice-based digital signature algorithm ensuring message authenticity. 
+            </li>
+            <li>
+                <strong>SPHINCS+:</strong> A stateless hash-based signature scheme providing robust security assurances. 
+            </li>
+            <li>
+                <strong>FALCON:</strong> A lattice-based signature scheme known for its efficiency and compact signatures. 
+            </li>
+        </ul>
+        <p class="section-description">
+            These algorithms have been selected by the National Institute of Standards and Technology (NIST) as part of their ongoing efforts to standardize quantum-resistant cryptographic methods. For an in-depth overview, see <a href="https://www.nist.gov/news-events/news/2022/07/nist-announces-first-four-quantum-resistant-cryptographic-algorithms" target="_blank">NIST’s official announcement</a>.
+        </p>
+        
+        <h2 class="section-title">what you can do next</h2>
+        <ul class="section-description">
+            <li>Share your time capsule with a friend.</li>
+            <li>
+                Try factoring a small number to understand how hard it becomes as numbers grow.
+                <div class="code-block">
+                    15 → 3 × 5<br>
+                    221 → 13 × 17<br>
+                    2047 → 23 × 89<br>
+                    4096-bit numbers? Not happening without quantum power.
+                </div>
+            </li>
+            <li><a href="https://www.nist.gov/cybersecurity/what-post-quantum-cryptography" target="_blank">Read about post-quantum cryptography and how it's replacing RSA.</a></li>
+            <li><a href="https://quantum-computing.ibm.com/" target="_blank">Experiment with IBM Quantum Experience</a> or <a href="https://qiskit.org/" target="_blank">Qiskit</a>.</li>
+            <li><a href="https://thequantuminsider.com/" target="_blank">Follow developments in quantum computing on The Quantum Insider.</a></li>
+        </ul>
     </div>
 </section>
+
 </body>
 </html>
