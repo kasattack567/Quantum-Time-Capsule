@@ -303,25 +303,22 @@
                     <textarea id="emailDraft" class="form-control mt-2" rows="12" readonly>
 Hi,
 
-The following message can only be read when quantum computers are built.
+The following message is a quantum time capsule. 
 
-Encrypted Message:
-{{ message_data.ciphertext }}
-
-You will need to factor this number to read the message:
+You will need to factorise this number to read the message:
 
 Public Key Modulus (N):
 {{ message_data.public_key_n }}
 
+Encrypted Message:
+{{ message_data.ciphertext }}
+
 Public Exponent (e):
 {{ message_data.public_exponent_e }}
 
-Keep this handy too.
+The message was encrypted using the RSA cryptosystem, and its secret key was intentionally deleted, so it can only be read when large quantum computers are built.
 
-Key Generation Time: {{ message_data.key_gen_time }} seconds
-Encryption Time: {{ message_data.encryption_time }} seconds
-
-Return to Quantum Time Capsule to get instructions on how to decrypt your message – but maybe in 2040 or so!
+Visit quantumtimecapsule.com to find out more and make your own quantum time capsules! 
                     </textarea>
 
                     <!-- Copy button -->
