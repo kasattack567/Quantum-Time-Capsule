@@ -17,10 +17,10 @@
             margin: 0;
             padding: 0;
         }
-
+    
         body {
             background: conic-gradient(
-                from 59deg, /* Starting angle */
+                from 59deg,
                 #10182E 0%,
                 #19244A 10%,
                 #252867 20%,
@@ -29,97 +29,101 @@
                 #0A1C51 80%,
                 #151D32 100%
             );
-            background-position: -800px center; /* Shift the background to the left */
-            background-size: calc(100% + 800px) 100%; /* Increase background width */
+            background-position: -800px center;
+            background-size: calc(100% + 800px) 100%;
             background-repeat: no-repeat;
             background-attachment: fixed;
             color: #fff;
             font-family: 'Roboto', sans-serif;
         }
-
+    
         .quantum-capsule {
             display: flex;
             flex-direction: column;
-            align-items: center; /* Center the content */
+            align-items: center;
             color: #fff;
             line-height: 1;
-            padding: 0 40px; /* Removed top padding */
+            padding: 0 40px;
         }
-
+    
         @media (max-width: 991px) {
             .quantum-capsule {
                 padding: 0 20px 100px;
             }
         }
-
+    
         /* Header Bar Styling */
         .header-container {
             display: flex;
             width: 100%;
             gap: 20px;
             justify-content: space-between;
-            align-items: center; /* Vertically center the items */
+            align-items: center;
             padding: 20px 0;
-            font-family: 'Red Hat Mono', monospace; /* Updated font family */
-            font-size: 1rem; /* Adjusted font size */
+            font-family: 'Red Hat Mono', monospace;
+            font-size: 1rem;
         }
-
+    
         .brand-title {
-            font-family: 'Instrument Sans', sans-serif; /* Updated font family */
-            font-size: 1.875rem; /* Equivalent to 30px */
+            font-family: 'Instrument Sans', sans-serif;
+            font-size: 1.875rem;
             font-weight: 500;
             text-transform: lowercase;
             color: #fff;
             margin: 0;
         }
-
+    
         .nav-menu {
             display: flex;
             align-items: center;
             gap: 40px;
-            font-size: 1rem; /* Equivalent to 16px */
+            font-size: 1rem;
         }
-
+    
         .nav-item {
             color: #d4d4d4;
             text-decoration: none;
             text-transform: lowercase;
             transition: color 0.3s;
         }
-
+    
         .nav-item:hover {
             color: #fff;
         }
-
+    
         .secret-message-prompt {
             text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
             margin-top: 80px;
-            font: 400 2.5rem 'Instrument Sans', sans-serif; /* Adjusted font size */
+            font: 400 2.5rem 'Instrument Sans', sans-serif;
             text-align: center;
             text-transform: lowercase;
         }
-
+    
         .message-container {
             width: 100%;
             max-width: 1200px;
             margin-top: 20px;
             padding: 0 20px;
         }
-
+    
         .message-description {
             color: #d4d4d4;
-            font: 400 1.125rem 'Instrument Sans', sans-serif; /* Adjusted font size */
+            font: 400 1.125rem 'Instrument Sans', sans-serif;
             text-align: left;
             margin: 0 auto;
             max-width: 100%;
         }
-
+    
         .message-description .highlight {
             color: #599bff;
             cursor: pointer;
-            text-decoration: none; /* Added to remove underline */
+            text-decoration: none;
         }
-
+    
+        .textarea-wrapper {
+            position: relative;
+        }
+    
         .message-input {
             border-radius: 27px;
             background-color: transparent;
@@ -127,38 +131,50 @@
             width: 100%;
             color: #b7b7b7;
             padding: 23px 34px;
-            font: 400 1.25rem 'Red Hat Mono', monospace; /* Adjusted font size */
+            font: 400 1.25rem 'Red Hat Mono', monospace;
             border: 1px solid #fff;
             resize: none;
             box-sizing: border-box;
             min-height: 200px;
         }
-
+    
         .message-input::placeholder {
             color: #b7b7b7;
         }
+    
+        .byte-counter {
+            position: absolute;
+            bottom: 12px;
+            right: 20px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.4); /* semi-transparent white */
+            font-family: 'Red Hat Mono', monospace;
+            pointer-events: none;
+            z-index: 2;
+        }
 
+    
         .button-container {
             display: flex;
             justify-content: flex-end;
             margin-top: 20px;
         }
-
+    
         .encrypt-button {
             border-radius: 19px;
             background-color: #1a2a9f;
             padding: 14px 37px;
-            font: 400 1.25rem 'Red Hat Mono', monospace; /* Adjusted font size */
+            font: 400 1.25rem 'Red Hat Mono', monospace;
             border: none;
             color: #fff;
             cursor: pointer;
             text-transform: lowercase;
         }
-
+    
         .encrypt-button:hover {
             background-color: #14207d;
         }
-
+    
         .visually-hidden {
             position: absolute;
             width: 1px;
@@ -170,7 +186,7 @@
             white-space: nowrap;
             border: 0;
         }
-
+    
         /* Matrix Loading Screen CSS */
         .loading-screen {
             position: fixed;
@@ -188,41 +204,41 @@
             visibility: hidden;
             overflow: hidden;
         }
-
+    
         .loading-screen.active {
             opacity: 1;
             visibility: visible;
         }
-
+    
         canvas {
             display: block;
         }
-
+    
         @media (max-width: 991px) {
             .header-container {
                 flex-direction: row;
                 justify-content: space-between;
                 align-items: center;
             }
-
+    
             .nav-menu {
                 gap: 20px;
             }
-
+    
             .secret-message-prompt {
                 margin-top: 40px;
             }
-
+    
             .message-container {
                 width: 100%;
                 padding: 0 10px;
             }
-
+    
             .button-container {
                 justify-content: center;
             }
         }
-    </style>
+    </style>   
 </head>
 <body>
     <section class="quantum-capsule">
@@ -251,7 +267,10 @@
             <!-- Message Form -->
             <form id="message-form" method="POST">
                 <label for="secretMessage" class="visually-hidden">Write your secret message</label>
-                <textarea id="secretMessage" name="message" class="message-input" placeholder="write a message worth waiting 20 years for..." aria-label="Write your secret message" required>{{ message|default('') }}</textarea>
+                <div class="textarea-wrapper">
+                    <textarea id="secretMessage" name="message" class="message-input" placeholder="write a message worth waiting 20 years for..." aria-label="Write your secret message" required>{{ message|default('') }}</textarea>
+                    <div class="byte-counter" id="byteCounter">0 / 350 bytes</div>
+                </div>
                 <div class="button-container">
                     <button type="submit" class="encrypt-button">encrypt</button>
                 </div>
@@ -266,23 +285,36 @@
 
     <!-- JavaScript for Character Counter and Byte Limit -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var textarea = document.getElementById('secretMessage');
-            var maxCharacters = {{ max_characters }};
-            var maxBytes = 446;  // Maximum message size in bytes
-
-            textarea.addEventListener('input', function() {
-                var message = textarea.value;
-                var messageLength = message.length;
-                var encoder = new TextEncoder();
-                var bytes = encoder.encode(message).length;
-
-                if (messageLength > maxCharacters || bytes > maxBytes) {
-                    textarea.value = message.substring(0, messageLength - 1);
+        document.addEventListener('DOMContentLoaded', function () {
+            const textarea = document.getElementById('secretMessage');
+            const counter = document.getElementById('byteCounter');
+            const maxBytes = 350;
+            const encoder = new TextEncoder();
+        
+            function updateCounter() {
+                const message = textarea.value;
+                const byteCount = encoder.encode(message).length;
+                counter.textContent = `${byteCount} / ${maxBytes} bytes`;
+            }
+        
+            textarea.addEventListener('input', function () {
+                let message = textarea.value;
+                let bytes = encoder.encode(message).length;
+        
+                while (bytes > maxBytes) {
+                    message = message.slice(0, -1);
+                    bytes = encoder.encode(message).length;
                 }
+        
+                textarea.value = message;
+                updateCounter();
             });
+        
+            updateCounter(); // ✅ This line ensures the counter updates on page load
         });
     </script>
+        
+        
 
     <!-- Matrix Animation Script -->
     <script>
