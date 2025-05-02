@@ -17,4 +17,4 @@ The Quantum Time Capsule offers users a way to send messages encrypted with RSA,
 
 Quantum Time Capsule is built with Flask
 
-Try the website out youself: quantumtimecapsule.com
+Try the website out yourself: [quantumtimecapsule.com](https://quantumtimecapsule.com)
